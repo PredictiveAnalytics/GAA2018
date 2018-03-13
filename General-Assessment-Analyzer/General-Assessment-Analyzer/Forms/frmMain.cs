@@ -8,6 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+/// <summary>
+/// Main Menu for GAA 2018.
+/// </summary>
 namespace General_Assessment_Analyzer
 {
     public partial class Form1 : Form
@@ -15,6 +19,11 @@ namespace General_Assessment_Analyzer
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
