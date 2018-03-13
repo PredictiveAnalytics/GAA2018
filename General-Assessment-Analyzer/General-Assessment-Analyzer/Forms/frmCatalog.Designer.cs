@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // frmCatalog
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "frmCatalog";
+            this.ClientSize = new System.Drawing.Size(928, 454);
+            this.Name = "frmCatalog";
+            this.Text = "Manage Assessment and Course Catalogs";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
