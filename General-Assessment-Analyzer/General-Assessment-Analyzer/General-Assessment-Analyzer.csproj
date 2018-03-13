@@ -71,6 +71,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\AssessmentCourseRecord.cs" />
     <Compile Include="Classes\AssessmentRow.cs" />
     <Compile Include="Classes\BannerCourseRecord.cs" />
     <Compile Include="Classes\BannerStudentRecord.cs" />
