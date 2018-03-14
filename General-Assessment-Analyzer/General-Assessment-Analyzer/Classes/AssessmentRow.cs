@@ -34,6 +34,5 @@ namespace General_Assessment_Analyzer.Classes
         public string Rubric_Cell_Feedback { get; set; }
         [XmlElement("Rubric_Cell_Score")]
         public string Rubric_Cell_Score { get; set; }
-
     }
 }
