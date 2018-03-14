@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using General_Assessment_Analyzer.Forms;
 
 
 /// <summary>
@@ -24,6 +25,12 @@ namespace General_Assessment_Analyzer
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void prepareReportsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport();
+            frm.Show();
         }
     }
 }

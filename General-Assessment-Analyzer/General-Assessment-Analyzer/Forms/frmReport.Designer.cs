@@ -31,13 +31,13 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.lb_StudentData = new System.Windows.Forms.Label();
+            this.lb_CourseData = new System.Windows.Forms.Label();
+            this.lb_AssessmentData = new System.Windows.Forms.Label();
+            this.btn_LoadStudentFile = new System.Windows.Forms.Button();
+            this.btn_LoadCourseFile = new System.Windows.Forms.Button();
+            this.btn_LoadAssessmentFile = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,72 +48,18 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.lb_StudentData);
+            this.groupBox1.Controls.Add(this.lb_CourseData);
+            this.groupBox1.Controls.Add(this.lb_AssessmentData);
+            this.groupBox1.Controls.Add(this.btn_LoadStudentFile);
+            this.groupBox1.Controls.Add(this.btn_LoadCourseFile);
+            this.groupBox1.Controls.Add(this.btn_LoadAssessmentFile);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(223, 149);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Load Data";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(7, 20);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(136, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Load Assessment Data";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(7, 49);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(136, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Load Course Data";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(7, 78);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(136, 23);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Load Student Data";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(149, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "label1";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(149, 54);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "label2";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(149, 83);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "label3";
             // 
             // label4
             // 
@@ -124,6 +70,63 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Assessment Catalog Loaded from Computer";
             // 
+            // lb_StudentData
+            // 
+            this.lb_StudentData.AutoSize = true;
+            this.lb_StudentData.Location = new System.Drawing.Point(149, 83);
+            this.lb_StudentData.Name = "lb_StudentData";
+            this.lb_StudentData.Size = new System.Drawing.Size(35, 13);
+            this.lb_StudentData.TabIndex = 5;
+            this.lb_StudentData.Text = "label3";
+            // 
+            // lb_CourseData
+            // 
+            this.lb_CourseData.AutoSize = true;
+            this.lb_CourseData.Location = new System.Drawing.Point(149, 54);
+            this.lb_CourseData.Name = "lb_CourseData";
+            this.lb_CourseData.Size = new System.Drawing.Size(35, 13);
+            this.lb_CourseData.TabIndex = 4;
+            this.lb_CourseData.Text = "label2";
+            // 
+            // lb_AssessmentData
+            // 
+            this.lb_AssessmentData.AutoSize = true;
+            this.lb_AssessmentData.Location = new System.Drawing.Point(149, 25);
+            this.lb_AssessmentData.Name = "lb_AssessmentData";
+            this.lb_AssessmentData.Size = new System.Drawing.Size(35, 13);
+            this.lb_AssessmentData.TabIndex = 3;
+            this.lb_AssessmentData.Text = "label1";
+            // 
+            // btn_LoadStudentFile
+            // 
+            this.btn_LoadStudentFile.Location = new System.Drawing.Point(7, 78);
+            this.btn_LoadStudentFile.Name = "btn_LoadStudentFile";
+            this.btn_LoadStudentFile.Size = new System.Drawing.Size(136, 23);
+            this.btn_LoadStudentFile.TabIndex = 2;
+            this.btn_LoadStudentFile.Text = "Load Student Data";
+            this.btn_LoadStudentFile.UseVisualStyleBackColor = true;
+            this.btn_LoadStudentFile.Click += new System.EventHandler(this.btn_LoadStudentFile_Click);
+            // 
+            // btn_LoadCourseFile
+            // 
+            this.btn_LoadCourseFile.Location = new System.Drawing.Point(7, 49);
+            this.btn_LoadCourseFile.Name = "btn_LoadCourseFile";
+            this.btn_LoadCourseFile.Size = new System.Drawing.Size(136, 23);
+            this.btn_LoadCourseFile.TabIndex = 1;
+            this.btn_LoadCourseFile.Text = "Load Course Data";
+            this.btn_LoadCourseFile.UseVisualStyleBackColor = true;
+            this.btn_LoadCourseFile.Click += new System.EventHandler(this.btn_LoadCourseFile_Click);
+            // 
+            // btn_LoadAssessmentFile
+            // 
+            this.btn_LoadAssessmentFile.Location = new System.Drawing.Point(7, 20);
+            this.btn_LoadAssessmentFile.Name = "btn_LoadAssessmentFile";
+            this.btn_LoadAssessmentFile.Size = new System.Drawing.Size(136, 23);
+            this.btn_LoadAssessmentFile.TabIndex = 0;
+            this.btn_LoadAssessmentFile.Text = "Load Assessment Data";
+            this.btn_LoadAssessmentFile.UseVisualStyleBackColor = true;
+            this.btn_LoadAssessmentFile.Click += new System.EventHandler(this.btn_LoadAssessmentFile_Click);
+            // 
             // frmReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -132,6 +135,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "frmReport";
             this.Text = "Produce Assessment Reports";
+            this.Load += new System.EventHandler(this.frmReport_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -144,11 +148,11 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label lb_StudentData;
+        private System.Windows.Forms.Label lb_CourseData;
+        private System.Windows.Forms.Label lb_AssessmentData;
+        private System.Windows.Forms.Button btn_LoadStudentFile;
+        private System.Windows.Forms.Button btn_LoadCourseFile;
+        private System.Windows.Forms.Button btn_LoadAssessmentFile;
     }
 }

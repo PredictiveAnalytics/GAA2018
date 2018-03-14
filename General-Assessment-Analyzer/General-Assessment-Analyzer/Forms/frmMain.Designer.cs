@@ -32,10 +32,10 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageCatalogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.prepareReportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGAAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +71,13 @@
             this.prepareReportsToolStripMenuItem.Name = "prepareReportsToolStripMenuItem";
             this.prepareReportsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.prepareReportsToolStripMenuItem.Text = "Prepare Reports";
+            this.prepareReportsToolStripMenuItem.Click += new System.EventHandler(this.prepareReportsToolStripMenuItem_Click);
+            // 
+            // quitToolStripMenuItem
+            // 
+            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.quitToolStripMenuItem.Text = "&Quit";
             // 
             // helpToolStripMenuItem
             // 
@@ -92,12 +99,6 @@
             this.aboutGAAToolStripMenuItem.Name = "aboutGAAToolStripMenuItem";
             this.aboutGAAToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.aboutGAAToolStripMenuItem.Text = "About GAA ";
-            // 
-            // quitToolStripMenuItem
-            // 
-            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.quitToolStripMenuItem.Text = "&Quit";
             // 
             // Form1
             // 
