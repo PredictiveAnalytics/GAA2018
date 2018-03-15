@@ -38,6 +38,7 @@
             this.btn_LoadStudentFile = new System.Windows.Forms.Button();
             this.btn_LoadCourseFile = new System.Windows.Forms.Button();
             this.btn_LoadAssessmentFile = new System.Windows.Forms.Button();
+            this.btnCombine = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,6 +48,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnCombine);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.lb_StudentData);
             this.groupBox1.Controls.Add(this.lb_CourseData);
@@ -56,7 +58,7 @@
             this.groupBox1.Controls.Add(this.btn_LoadAssessmentFile);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(223, 149);
+            this.groupBox1.Size = new System.Drawing.Size(223, 170);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Load Data";
@@ -75,27 +77,27 @@
             this.lb_StudentData.AutoSize = true;
             this.lb_StudentData.Location = new System.Drawing.Point(149, 83);
             this.lb_StudentData.Name = "lb_StudentData";
-            this.lb_StudentData.Size = new System.Drawing.Size(35, 13);
+            this.lb_StudentData.Size = new System.Drawing.Size(33, 13);
             this.lb_StudentData.TabIndex = 5;
-            this.lb_StudentData.Text = "label3";
+            this.lb_StudentData.Text = "Done";
             // 
             // lb_CourseData
             // 
             this.lb_CourseData.AutoSize = true;
             this.lb_CourseData.Location = new System.Drawing.Point(149, 54);
             this.lb_CourseData.Name = "lb_CourseData";
-            this.lb_CourseData.Size = new System.Drawing.Size(35, 13);
+            this.lb_CourseData.Size = new System.Drawing.Size(33, 13);
             this.lb_CourseData.TabIndex = 4;
-            this.lb_CourseData.Text = "label2";
+            this.lb_CourseData.Text = "Done";
             // 
             // lb_AssessmentData
             // 
             this.lb_AssessmentData.AutoSize = true;
             this.lb_AssessmentData.Location = new System.Drawing.Point(149, 25);
             this.lb_AssessmentData.Name = "lb_AssessmentData";
-            this.lb_AssessmentData.Size = new System.Drawing.Size(35, 13);
+            this.lb_AssessmentData.Size = new System.Drawing.Size(33, 13);
             this.lb_AssessmentData.TabIndex = 3;
-            this.lb_AssessmentData.Text = "label1";
+            this.lb_AssessmentData.Text = "Done";
             // 
             // btn_LoadStudentFile
             // 
@@ -127,6 +129,16 @@
             this.btn_LoadAssessmentFile.UseVisualStyleBackColor = true;
             this.btn_LoadAssessmentFile.Click += new System.EventHandler(this.btn_LoadAssessmentFile_Click);
             // 
+            // btnCombine
+            // 
+            this.btnCombine.Location = new System.Drawing.Point(7, 141);
+            this.btnCombine.Name = "btnCombine";
+            this.btnCombine.Size = new System.Drawing.Size(211, 23);
+            this.btnCombine.TabIndex = 7;
+            this.btnCombine.Text = "Combine Dataset";
+            this.btnCombine.UseVisualStyleBackColor = true;
+            this.btnCombine.Click += new System.EventHandler(this.btnCombine_Click);
+            // 
             // frmReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,5 +166,6 @@
         private System.Windows.Forms.Button btn_LoadStudentFile;
         private System.Windows.Forms.Button btn_LoadCourseFile;
         private System.Windows.Forms.Button btn_LoadAssessmentFile;
+        private System.Windows.Forms.Button btnCombine;
     }
 }

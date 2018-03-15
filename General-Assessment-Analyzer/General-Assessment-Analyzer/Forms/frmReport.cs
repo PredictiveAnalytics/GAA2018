@@ -33,6 +33,11 @@ namespace General_Assessment_Analyzer.Forms
            // openFileDialog1.InitialDirectory = @"C:\";
             openFileDialog1.Filter = "CSV Files (*.csv)|*.csv";
             openFileDialog1.RestoreDirectory = true;
+
+            //Hide the "Done" labels 
+            lb_AssessmentData.Visible = false;
+            lb_CourseData.Visible = false;
+            lb_StudentData.Visible = false; 
         }
 
         #region Form Methods
@@ -67,15 +72,13 @@ namespace General_Assessment_Analyzer.Forms
                     /*var test = _AssessmentRows.Where(x => x.Rubric_ID == "95904" & x.STUDENT_ID == "H00667089")
                         .Select(x => x.Rubric_Row_Header).ToString();
                     Debug.WriteLine(test);*/
+                    lb_AssessmentData.Visible = true;
                     foreach (AssessmentRow ar in _AssessmentRows)
                     {
-                        if (ar.Rubric_ID=="95904" && ar.STUDENT_ID == "H00667089")
+                        if (ar.Rubric_Row_Header.Contains((char)13))
                         {
-                            //Debug.WriteLine(ar.Rubric_Row_Header);
-                            if (ar.Rubric_Row_Header.Contains((char)13))
-                            {
-                                Debug.WriteLine(ar.Rubric_Row_Header);
-                            }
+                            //remove returns from data. 
+                            ar.Rubric_Row_Header = ar.Rubric_Row_Header.Replace((char)13, ' ');
                         }
                     }
                 }
@@ -98,6 +101,10 @@ namespace General_Assessment_Analyzer.Forms
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
+                else
+                {
+                    lb_CourseData.Visible = true;
+                }
             }
         }
 
@@ -117,7 +124,16 @@ namespace General_Assessment_Analyzer.Forms
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
+                else
+                {
+                    lb_StudentData.Visible = true;
+                }
             }
+        }
+
+        private void btnCombine_Click(object sender, EventArgs e)
+        {
+            
         }
         #endregion
 
@@ -189,6 +205,13 @@ namespace General_Assessment_Analyzer.Forms
 
             return return_value;
         }
+
+        private bool MatchCourseRecords()
+        {
+
+            return false;
+        }
+
         #endregion
 
         #region Workbook Methods
@@ -197,6 +220,5 @@ namespace General_Assessment_Analyzer.Forms
         #region Mathmatical Methods
         #endregion
 
-        
     }
 }
