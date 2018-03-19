@@ -40,15 +40,15 @@
             this.btn_LoadCourseFile = new System.Windows.Forms.Button();
             this.btn_LoadAssessmentFile = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.clb_Subjects = new System.Windows.Forms.CheckedListBox();
             this.btn_FilterSubjects = new System.Windows.Forms.Button();
+            this.clb_Subjects = new System.Windows.Forms.CheckedListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btn_FilterAssessments = new System.Windows.Forms.Button();
             this.clb_AssessmentTypes = new System.Windows.Forms.CheckedListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.clb_CoursesWithAssessments = new System.Windows.Forms.CheckedListBox();
-            this.btn_SelectAll = new System.Windows.Forms.Button();
+            this.tvCourses = new System.Windows.Forms.TreeView();
             this.btn_AddSelectedCourses = new System.Windows.Forms.Button();
+            this.btn_SelectAll = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -163,14 +163,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filter - Step 1 - Subjects";
             // 
-            // clb_Subjects
-            // 
-            this.clb_Subjects.FormattingEnabled = true;
-            this.clb_Subjects.Location = new System.Drawing.Point(7, 20);
-            this.clb_Subjects.Name = "clb_Subjects";
-            this.clb_Subjects.Size = new System.Drawing.Size(114, 124);
-            this.clb_Subjects.TabIndex = 0;
-            // 
             // btn_FilterSubjects
             // 
             this.btn_FilterSubjects.Location = new System.Drawing.Point(128, 20);
@@ -180,6 +172,14 @@
             this.btn_FilterSubjects.Text = "Filter Subjects";
             this.btn_FilterSubjects.UseVisualStyleBackColor = true;
             this.btn_FilterSubjects.Click += new System.EventHandler(this.btn_FilterSubjects_Click);
+            // 
+            // clb_Subjects
+            // 
+            this.clb_Subjects.FormattingEnabled = true;
+            this.clb_Subjects.Location = new System.Drawing.Point(7, 20);
+            this.clb_Subjects.Name = "clb_Subjects";
+            this.clb_Subjects.Size = new System.Drawing.Size(114, 124);
+            this.clb_Subjects.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -212,33 +212,25 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.tvCourses);
             this.groupBox4.Controls.Add(this.btn_AddSelectedCourses);
             this.groupBox4.Controls.Add(this.btn_SelectAll);
-            this.groupBox4.Controls.Add(this.clb_CoursesWithAssessments);
             this.groupBox4.Location = new System.Drawing.Point(264, 13);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(331, 214);
+            this.groupBox4.Size = new System.Drawing.Size(413, 214);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Select Courses";
             // 
-            // clb_CoursesWithAssessments
+            // tvCourses
             // 
-            this.clb_CoursesWithAssessments.FormattingEnabled = true;
-            this.clb_CoursesWithAssessments.Location = new System.Drawing.Point(7, 20);
-            this.clb_CoursesWithAssessments.Name = "clb_CoursesWithAssessments";
-            this.clb_CoursesWithAssessments.Size = new System.Drawing.Size(318, 154);
-            this.clb_CoursesWithAssessments.TabIndex = 0;
-            // 
-            // btn_SelectAll
-            // 
-            this.btn_SelectAll.Location = new System.Drawing.Point(7, 185);
-            this.btn_SelectAll.Name = "btn_SelectAll";
-            this.btn_SelectAll.Size = new System.Drawing.Size(81, 23);
-            this.btn_SelectAll.TabIndex = 1;
-            this.btn_SelectAll.Text = "Select All";
-            this.btn_SelectAll.UseVisualStyleBackColor = true;
-            this.btn_SelectAll.Click += new System.EventHandler(this.btn_SelectAll_Click);
+            this.tvCourses.CheckBoxes = true;
+            this.tvCourses.Location = new System.Drawing.Point(7, 20);
+            this.tvCourses.Name = "tvCourses";
+            this.tvCourses.Size = new System.Drawing.Size(400, 159);
+            this.tvCourses.TabIndex = 3;
+            this.tvCourses.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tvCourses_AfterCheck);
+            this.tvCourses.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tvCourses_MouseClick);
             // 
             // btn_AddSelectedCourses
             // 
@@ -249,6 +241,16 @@
             this.btn_AddSelectedCourses.Text = "Add Selected";
             this.btn_AddSelectedCourses.UseVisualStyleBackColor = true;
             this.btn_AddSelectedCourses.Click += new System.EventHandler(this.btn_AddSelectedCourses_Click);
+            // 
+            // btn_SelectAll
+            // 
+            this.btn_SelectAll.Location = new System.Drawing.Point(7, 185);
+            this.btn_SelectAll.Name = "btn_SelectAll";
+            this.btn_SelectAll.Size = new System.Drawing.Size(81, 23);
+            this.btn_SelectAll.TabIndex = 1;
+            this.btn_SelectAll.Text = "Select All";
+            this.btn_SelectAll.UseVisualStyleBackColor = true;
+            this.btn_SelectAll.Click += new System.EventHandler(this.btn_SelectAll_Click);
             // 
             // frmReport
             // 
@@ -293,6 +295,6 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button btn_AddSelectedCourses;
         private System.Windows.Forms.Button btn_SelectAll;
-        private System.Windows.Forms.CheckedListBox clb_CoursesWithAssessments;
+        private System.Windows.Forms.TreeView tvCourses;
     }
 }

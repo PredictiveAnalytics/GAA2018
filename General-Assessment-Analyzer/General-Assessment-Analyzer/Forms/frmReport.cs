@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Wordprocessing;
 using AutoMapper;
 using General_Assessment_Analyzer.Classes;
+using CheckBox = System.Windows.Forms.CheckBox;
 
 namespace General_Assessment_Analyzer.Forms
 {
@@ -27,7 +28,8 @@ namespace General_Assessment_Analyzer.Forms
         public List<BannerCourseRecord> _BannerCourseRecords;
         public List<BannerStudentRecord> _BannerStudentRecords;
 
-        public List<string> _selectedAssessments; 
+        public List<string> _selectedAssessments;
+        public List<string> _selectedCourseIDs; 
         #endregion
         public frmReport()
         {
@@ -52,7 +54,7 @@ namespace General_Assessment_Analyzer.Forms
 
         private void frmReport_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         #endregion
@@ -192,6 +194,7 @@ namespace General_Assessment_Analyzer.Forms
                     }
                 }
                 _selectedAssessments = Assessments;
+                _selectedCourseIDs = CourseIDs;
             }
             else
             {
@@ -204,29 +207,42 @@ namespace General_Assessment_Analyzer.Forms
         {
             List<string> Types = new List<string>();
             List<string> RemainingAssessments = new List<string>();
+            List<string> RemainingCourseIDs = new List<string>();
             Debug.WriteLine("Filtering Types");
             if (clb_AssessmentTypes.CheckedItems.Count > 0)
             {
+                Debug.WriteLine("Begin Filter of Assessment Types");
                 foreach (var item in clb_AssessmentTypes.CheckedItems)
                 {
                     Types.Add("__" + item);
                     Debug.WriteLine("__" + item);
                 }
+
+                Debug.WriteLine("Idents");
                 foreach (string a in _selectedAssessments)
                 {
-                    string assessment = a.Substring(a.LastIndexOf("__"));
-                    //Debug.WriteLine(assessment);
-                    if (Types.Contains(assessment))
+                    //tmp = Regex.Replace(tmp, @"[\d-]", string.Empty);
+                    string ident = a.Substring(a.LastIndexOf("__"));
+                    ident = Regex.Replace(ident, @"[\d-]", string.Empty);
+                    if (Types.Contains(ident))
                     {
+                        Debug.WriteLine("Keeping: " + a);
                         RemainingAssessments.Add(a);
                     }
+                    else
+                    {
+                        Debug.WriteLine("Removing: " + a);
+                    }
                 }
-
-                Debug.WriteLine("old List");
-                _selectedAssessments.ForEach(x=>Debug.WriteLine(x));
-                Debug.WriteLine("new list");
-                RemainingAssessments.ForEach(x => Debug.WriteLine(x));
+                _selectedAssessments = RemainingAssessments;
+                //_AssessmentRows.RemoveAll(x => !Assessments.Contains(x.Rubric_Name));
+                _AssessmentRows.RemoveAll(x => !_selectedAssessments.Contains(x.Rubric_Name));
+                //CourseIDs = _MatchedCourseRecords.Select(x => x.BB_Course_ID).Distinct().ToList();
+                RemainingCourseIDs = _AssessmentRows.Select(x => x.Course_ID).Distinct().ToList();
+                //RemainingCourseIDs.ForEach(x=>clb_CoursesWithAssessments.Items.Add(x));
+                PopulateCourseInformation(RemainingCourseIDs);
             }
+
             else
             {
                 MessageBox.Show("Please select at least one assessment type for filtering.", "Filtering error",
@@ -236,12 +252,83 @@ namespace General_Assessment_Analyzer.Forms
 
         private void btn_SelectAll_Click(object sender, EventArgs e)
         {
-            
+            foreach (TreeNode tn in tvCourses.Nodes)
+            {
+                if (!tn.Checked)
+                {
+                    tn.Checked = true;
+                }
+            }
         }
 
         private void btn_AddSelectedCourses_Click(object sender, EventArgs e)
         {
+            List<string> SelectedCourses = new List<string>();
+            int count = 0;
+            foreach (TreeNode tn in tvCourses.Nodes)
+            {
+                if (tn.Parent == null && tn.Checked)
+                {
+                    count++;
+                }
+            }
 
+            if (count > 0)
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Please select at least one Course for inclusion in the report.", "Selection error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void tvCourses_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Parent == null && e.Node.Checked)
+            {
+                //Parent Node checked
+                Debug.WriteLine(e.Node.Text);
+                foreach (TreeNode p in tvCourses.Nodes)
+                {
+                    if (e.Node.Text == p.Text)
+                    {
+                        foreach (TreeNode subNode in p.Nodes)
+                        {
+                            subNode.Checked = true;
+                            if (subNode.Nodes.Count > 0)
+                            {
+                                foreach (TreeNode c in subNode.Nodes)
+                                {
+                                    c.Checked = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (e.Node.Parent == null && !e.Node.Checked)
+            {
+                Debug.WriteLine("Unchecked");
+                foreach (TreeNode p in tvCourses.Nodes)
+                {
+                    if (e.Node.Text == p.Text)
+                    {
+                        foreach (TreeNode subNode in p.Nodes)
+                        {
+                            subNode.Checked = false;
+                            if (subNode.Nodes.Count > 0)
+                            {
+                                foreach (TreeNode c in subNode.Nodes)
+                                {
+                                    c.Checked = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
@@ -345,6 +432,56 @@ namespace General_Assessment_Analyzer.Forms
             Subjects.ForEach(x => clb_Subjects.Items.Add(x));
         }
 
+        private void PopulateCourseInformation(List<string> CourseIDs)
+        {
+            foreach (string cid in CourseIDs)
+            {
+                string[] c = cid.Split('.');
+                string crn = c[0];
+                string term = c[1];
+
+                //clb_CoursesWithAssessments.Items.Add(crn + "." + term);
+                foreach (BannerCourseRecord bcr in _BannerCourseRecords)
+                {
+                    if (bcr.CRN == crn && bcr.Term == term)
+                    {
+                        List<string> includedAssessments = new List<string>();
+                        //Found
+                        //clb_CoursesWithAssessments.Items.Add((bcr.Subject + "-" + bcr.Number + ": " + bcr.Title + " (" + cid + ")"));
+                        TreeNode rootNode = new TreeNode((bcr.Subject + "-" + bcr.Number + ": " + bcr.Title + " (" + cid + ")"));
+                        TreeNode childInfoNode = new TreeNode("Course Information");
+                        childInfoNode.Nodes.Add("Term: " + bcr.Term_Desc + "(" + bcr.Term + ")");
+                        childInfoNode.Nodes.Add("PTRM : " + bcr.PTRM);
+                        childInfoNode.Nodes.Add("Instructor: " + bcr.Instructor_Last + ", " + bcr.Instructor_First);
+                        childInfoNode.Nodes.Add("Enrollment: " + bcr.Enrollment);
+                        TreeNode childAssessmentNode = new TreeNode("Assessments");
+                        foreach (AssessmentRow ar in _AssessmentRows)
+                        {
+                            if (ar.Course_ID == cid)
+                            {
+                                includedAssessments.Add(ar.Rubric_Name);
+                            }
+                        }
+                        includedAssessments = includedAssessments.Distinct().ToList();
+                        includedAssessments.Sort();
+                        foreach (string a in includedAssessments)
+                        {
+                            if (_selectedAssessments.Contains(a))
+                            {
+                                childAssessmentNode.Nodes.Add(a);
+                            }
+                        }
+                        rootNode.Nodes.Add(childInfoNode);
+                        rootNode.Nodes.Add(childAssessmentNode);
+                        tvCourses.Nodes.Add(rootNode);
+                    }
+                }
+            }
+            
+        }
+
+
+
 
         #endregion
 
@@ -354,5 +491,9 @@ namespace General_Assessment_Analyzer.Forms
         #region Mathmatical Methods
         #endregion
 
+        private void tvCourses_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }
