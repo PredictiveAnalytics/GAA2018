@@ -49,10 +49,26 @@
             this.tvCourses = new System.Windows.Forms.TreeView();
             this.btn_AddSelectedCourses = new System.Windows.Forms.Button();
             this.btn_SelectAll = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.btn_LockScale = new System.Windows.Forms.Button();
+            this.dgvScale = new System.Windows.Forms.DataGridView();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.btn_FilterRates = new System.Windows.Forms.Button();
+            this.clb_Rates = new System.Windows.Forms.CheckedListBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.btn_FilterMajors = new System.Windows.Forms.Button();
+            this.clb_Majors = new System.Windows.Forms.CheckedListBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.btn_SaveWorkbook = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvScale)).BeginInit();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -217,7 +233,7 @@
             this.groupBox4.Controls.Add(this.btn_SelectAll);
             this.groupBox4.Location = new System.Drawing.Point(264, 13);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(413, 214);
+            this.groupBox4.Size = new System.Drawing.Size(413, 170);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Select Courses";
@@ -227,14 +243,13 @@
             this.tvCourses.CheckBoxes = true;
             this.tvCourses.Location = new System.Drawing.Point(7, 20);
             this.tvCourses.Name = "tvCourses";
-            this.tvCourses.Size = new System.Drawing.Size(400, 159);
+            this.tvCourses.Size = new System.Drawing.Size(400, 117);
             this.tvCourses.TabIndex = 3;
             this.tvCourses.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tvCourses_AfterCheck);
-            this.tvCourses.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tvCourses_MouseClick);
             // 
             // btn_AddSelectedCourses
             // 
-            this.btn_AddSelectedCourses.Location = new System.Drawing.Point(94, 185);
+            this.btn_AddSelectedCourses.Location = new System.Drawing.Point(94, 141);
             this.btn_AddSelectedCourses.Name = "btn_AddSelectedCourses";
             this.btn_AddSelectedCourses.Size = new System.Drawing.Size(81, 23);
             this.btn_AddSelectedCourses.TabIndex = 2;
@@ -244,7 +259,7 @@
             // 
             // btn_SelectAll
             // 
-            this.btn_SelectAll.Location = new System.Drawing.Point(7, 185);
+            this.btn_SelectAll.Location = new System.Drawing.Point(7, 141);
             this.btn_SelectAll.Name = "btn_SelectAll";
             this.btn_SelectAll.Size = new System.Drawing.Size(81, 23);
             this.btn_SelectAll.TabIndex = 1;
@@ -252,11 +267,123 @@
             this.btn_SelectAll.UseVisualStyleBackColor = true;
             this.btn_SelectAll.Click += new System.EventHandler(this.btn_SelectAll_Click);
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btn_LockScale);
+            this.groupBox5.Controls.Add(this.dgvScale);
+            this.groupBox5.Location = new System.Drawing.Point(264, 184);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(407, 163);
+            this.groupBox5.TabIndex = 4;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Configure Scale";
+            // 
+            // btn_LockScale
+            // 
+            this.btn_LockScale.Location = new System.Drawing.Point(290, 20);
+            this.btn_LockScale.Name = "btn_LockScale";
+            this.btn_LockScale.Size = new System.Drawing.Size(111, 23);
+            this.btn_LockScale.TabIndex = 1;
+            this.btn_LockScale.Text = "Lock Scale";
+            this.btn_LockScale.UseVisualStyleBackColor = true;
+            // 
+            // dgvScale
+            // 
+            this.dgvScale.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvScale.Location = new System.Drawing.Point(7, 20);
+            this.dgvScale.Name = "dgvScale";
+            this.dgvScale.RowHeadersVisible = false;
+            this.dgvScale.Size = new System.Drawing.Size(277, 137);
+            this.dgvScale.TabIndex = 0;
+            this.dgvScale.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvScale_DataError);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.btn_FilterRates);
+            this.groupBox6.Controls.Add(this.clb_Rates);
+            this.groupBox6.Location = new System.Drawing.Point(264, 353);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(407, 119);
+            this.groupBox6.TabIndex = 5;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Filter - Rate Codes - Uncheck to Exclude";
+            // 
+            // btn_FilterRates
+            // 
+            this.btn_FilterRates.Location = new System.Drawing.Point(291, 20);
+            this.btn_FilterRates.Name = "btn_FilterRates";
+            this.btn_FilterRates.Size = new System.Drawing.Size(110, 23);
+            this.btn_FilterRates.TabIndex = 1;
+            this.btn_FilterRates.Text = "Filter Rates";
+            this.btn_FilterRates.UseVisualStyleBackColor = true;
+            this.btn_FilterRates.Click += new System.EventHandler(this.btn_FilterRates_Click);
+            // 
+            // clb_Rates
+            // 
+            this.clb_Rates.FormattingEnabled = true;
+            this.clb_Rates.Location = new System.Drawing.Point(7, 19);
+            this.clb_Rates.Name = "clb_Rates";
+            this.clb_Rates.Size = new System.Drawing.Size(277, 94);
+            this.clb_Rates.TabIndex = 0;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.btn_FilterMajors);
+            this.groupBox7.Controls.Add(this.clb_Majors);
+            this.groupBox7.Location = new System.Drawing.Point(264, 478);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(407, 119);
+            this.groupBox7.TabIndex = 6;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Filter - Major Codes - Uncheck to Exclude";
+            // 
+            // btn_FilterMajors
+            // 
+            this.btn_FilterMajors.Location = new System.Drawing.Point(290, 19);
+            this.btn_FilterMajors.Name = "btn_FilterMajors";
+            this.btn_FilterMajors.Size = new System.Drawing.Size(110, 23);
+            this.btn_FilterMajors.TabIndex = 2;
+            this.btn_FilterMajors.Text = "Filter Majors";
+            this.btn_FilterMajors.UseVisualStyleBackColor = true;
+            this.btn_FilterMajors.Click += new System.EventHandler(this.btn_FilterMajors_Click);
+            // 
+            // clb_Majors
+            // 
+            this.clb_Majors.FormattingEnabled = true;
+            this.clb_Majors.Location = new System.Drawing.Point(7, 19);
+            this.clb_Majors.Name = "clb_Majors";
+            this.clb_Majors.Size = new System.Drawing.Size(277, 94);
+            this.clb_Majors.TabIndex = 0;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.btn_SaveWorkbook);
+            this.groupBox8.Location = new System.Drawing.Point(684, 13);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(211, 54);
+            this.groupBox8.TabIndex = 7;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Save Workbook";
+            // 
+            // btn_SaveWorkbook
+            // 
+            this.btn_SaveWorkbook.Location = new System.Drawing.Point(6, 20);
+            this.btn_SaveWorkbook.Name = "btn_SaveWorkbook";
+            this.btn_SaveWorkbook.Size = new System.Drawing.Size(198, 23);
+            this.btn_SaveWorkbook.TabIndex = 0;
+            this.btn_SaveWorkbook.Text = "Save Workbook";
+            this.btn_SaveWorkbook.UseVisualStyleBackColor = true;
+            this.btn_SaveWorkbook.Click += new System.EventHandler(this.btn_SaveWorkbook_Click);
+            // 
             // frmReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(907, 603);
+            this.Controls.Add(this.groupBox8);
+            this.Controls.Add(this.groupBox7);
+            this.Controls.Add(this.groupBox6);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -269,6 +396,11 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvScale)).EndInit();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -296,5 +428,16 @@
         private System.Windows.Forms.Button btn_AddSelectedCourses;
         private System.Windows.Forms.Button btn_SelectAll;
         private System.Windows.Forms.TreeView tvCourses;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button btn_LockScale;
+        private System.Windows.Forms.DataGridView dgvScale;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Button btn_FilterRates;
+        private System.Windows.Forms.CheckedListBox clb_Rates;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Button btn_FilterMajors;
+        private System.Windows.Forms.CheckedListBox clb_Majors;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Button btn_SaveWorkbook;
     }
 }

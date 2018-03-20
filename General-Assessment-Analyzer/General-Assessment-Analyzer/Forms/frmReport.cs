@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Wordprocessing;
 using AutoMapper;
+using ClosedXML.Excel;
 using General_Assessment_Analyzer.Classes;
 using CheckBox = System.Windows.Forms.CheckBox;
 
@@ -27,9 +28,15 @@ namespace General_Assessment_Analyzer.Forms
         public List<AssessmentCourseRecord> _MatchedCourseRecords;
         public List<BannerCourseRecord> _BannerCourseRecords;
         public List<BannerStudentRecord> _BannerStudentRecords;
+        public List<ScalePoint> _assessmentScale; 
 
         public List<string> _selectedAssessments;
-        public List<string> _selectedCourseIDs; 
+        public List<string> _selectedCourseIDs;
+
+        public IXLWorkbook _workbook;
+        public int _frequency_col;
+        public int _mean_col;
+        public int _stDev_col;
         #endregion
         public frmReport()
         {
@@ -48,6 +55,9 @@ namespace General_Assessment_Analyzer.Forms
             //Initilize the Matched Course List 
             _MatchedCourseRecords = new List<AssessmentCourseRecord>();
             _selectedAssessments = new List<string>();
+
+            //Initilize The Scale 
+            _assessmentScale = new List<ScalePoint>();
         }
 
         #region Form Methods
@@ -55,6 +65,12 @@ namespace General_Assessment_Analyzer.Forms
         private void frmReport_Load(object sender, EventArgs e)
         {
             
+        }
+
+        private void dgvScale_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Please enter only a number in the Value Column.", "Scale Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
 
         #endregion
@@ -191,6 +207,7 @@ namespace General_Assessment_Analyzer.Forms
                     {
                         clb_AssessmentTypes.SetItemChecked(0, true);
                         btn_FilterAssessments.Enabled = false; 
+                        PopulateCourseInformation(CourseIDs);
                     }
                 }
                 _selectedAssessments = Assessments;
@@ -264,6 +281,8 @@ namespace General_Assessment_Analyzer.Forms
         private void btn_AddSelectedCourses_Click(object sender, EventArgs e)
         {
             List<string> SelectedCourses = new List<string>();
+            List<string> SelectedCIDS = new List<string>();
+            List<string> Scale = new List<string>();
             int count = 0;
             foreach (TreeNode tn in tvCourses.Nodes)
             {
@@ -275,6 +294,67 @@ namespace General_Assessment_Analyzer.Forms
 
             if (count > 0)
             {
+                btn_AddSelectedCourses.Enabled = false;
+                btn_SelectAll.Enabled = false;
+                //string input = "User name (sales)";
+                //string output = input.Split('(', ')')[1];
+                foreach (TreeNode tn in tvCourses.Nodes)
+                {
+                    if (tn.Checked)
+                    {
+                        SelectedCourses.Add(tn.Text);
+                    }
+                }
+                foreach (string c in SelectedCourses)
+                {
+                    string tmp = c.Split('(', ')')[1];
+                    SelectedCIDS.Add(tmp);
+                    Debug.WriteLine(tmp);
+                }
+
+                _AssessmentRows.RemoveAll(x => !SelectedCIDS.Contains(x.Course_ID));
+                _AssessmentRows.RemoveAll(x => !_selectedAssessments.Contains(x.Rubric_Name));
+                Scale = _AssessmentRows.Select(x => x.Rubric_Column_Header).Distinct().ToList();
+                Scale.ForEach(x=>Debug.WriteLine(x));
+                foreach (string s in Scale)
+                {
+                    if (s.Length > 0)
+                    {
+                        ScalePoint p = new ScalePoint(s, 0);
+                        _assessmentScale.Add(p);
+                    }
+                }
+                dgvScale.DataSource = _assessmentScale;
+                dgvScale.Columns[0].ReadOnly = true;
+
+
+
+
+                List<string> StudentIDs = _AssessmentRows.Where(x => SelectedCIDS.Contains(x.Course_ID))
+                    .Select(x => x.STUDENT_ID).Distinct().ToList();
+                _BannerStudentRecords.RemoveAll(x => !StudentIDs.Contains(x.ID));
+                StudentIDs.ForEach(x=>Debug.WriteLine(x));
+                List<string> RateCodes = _BannerStudentRecords.Where(x => StudentIDs.Contains(x.ID))
+                    .Select(x => x.RateCode + " (" + x.RateDesc + ")").Distinct().ToList();
+                List<string> MajorCodes = _BannerStudentRecords.Where(x => StudentIDs.Contains(x.ID))
+                    .Select(x => x.MajorCode + " (" + x.MajorDesc + ")").Distinct().ToList();
+
+                RateCodes.Sort();
+                MajorCodes.Sort();
+
+                RateCodes.ForEach(x=>clb_Rates.Items.Add(x));
+                MajorCodes.ForEach(x=>clb_Majors.Items.Add(x));
+
+                for (int i = 0; i < clb_Rates.Items.Count; i++)
+                {
+                    clb_Rates.SetItemCheckState(i, CheckState.Checked);
+                }
+
+                for (int i = 0; i < clb_Majors.Items.Count; i++)
+                {
+                    clb_Majors.SetItemCheckState(i, CheckState.Checked);
+                }
+                btn_AddSelectedCourses.Enabled = false;
 
             }
             else
@@ -331,6 +411,58 @@ namespace General_Assessment_Analyzer.Forms
             }
         }
 
+        private void btn_FilterRates_Click(object sender, EventArgs e)
+        {
+            List<string> excludedRateCodes = new List<string>();
+            IEnumerable<object> UncheckedItems = (from object item in clb_Rates.Items
+                                                  where !clb_Rates.CheckedItems.Contains(item)
+                                                  select item);
+            //excluded.ForEach(x=>Debug.WriteLine(x));
+            List<string> excludedStudents = new List<string>();
+            foreach (object item in UncheckedItems)
+            {
+                string tmp = item.ToString();
+                tmp = tmp.Substring(0, tmp.IndexOf('(')).Trim();
+                excludedRateCodes.Add(tmp);
+                Debug.WriteLine(tmp);
+            }
+            Debug.WriteLine("Before Removing Students: " + _BannerStudentRecords.Count);
+            excludedStudents = _BannerStudentRecords.Where(x => excludedRateCodes.Contains(x.RateCode))
+                .Select(x => x.ID).Distinct().ToList();
+            _BannerStudentRecords =
+                _BannerStudentRecords.Where(x => !excludedStudents.Contains(x.ID)).Distinct().ToList();
+            Debug.WriteLine("After Removing Students: " + _BannerStudentRecords.Count);
+
+        }
+
+        private void btn_FilterMajors_Click(object sender, EventArgs e)
+        {
+            List<string> excludedMajorCodes = new List<string>();
+            IEnumerable<object> UncheckedItems = (from object item in clb_Majors.Items
+                                                  where !clb_Majors.CheckedItems.Contains(item)
+                                                  select item);
+            //excluded.ForEach(x=>Debug.WriteLine(x));
+            List<string> excludedStudents = new List<string>();
+            foreach (object item in UncheckedItems)
+            {
+                string tmp = item.ToString();
+                tmp = tmp.Substring(0, tmp.IndexOf('(')).Trim();
+                excludedMajorCodes.Add(tmp);
+                Debug.WriteLine(tmp);
+            }
+            Debug.WriteLine("Before Removing Students: " + _BannerStudentRecords.Count);
+            excludedStudents = _BannerStudentRecords.Where(x => excludedMajorCodes.Contains(x.MajorCode))
+                .Select(x => x.ID).Distinct().ToList();
+            _BannerStudentRecords =
+                _BannerStudentRecords.Where(x => !excludedStudents.Contains(x.ID)).Distinct().ToList();
+            Debug.WriteLine("After Removing Students: " + _BannerStudentRecords.Count);
+        }
+
+        private void btn_SaveWorkbook_Click(object sender, EventArgs e)
+        {
+            BuildWorkbook();
+        }
+
         #endregion
 
         #region File Processing Methods
@@ -349,6 +481,9 @@ namespace General_Assessment_Analyzer.Forms
                 _AssessmentRows = records.ToList();
                 return_value = true;
                 Debug.WriteLine("Assessment Data loaded: " + _AssessmentRows.Count);
+
+            //This is important.  Trying to correct an error in the rubric data.  Will review with Lisa B when I have a chance. 
+            _AssessmentRows.RemoveAll(x => x.Rubric_Cell_Score == "NULL");
             
             return return_value;
         }
@@ -480,20 +615,172 @@ namespace General_Assessment_Analyzer.Forms
             
         }
 
-
-
-
         #endregion
 
         #region Workbook Methods
-        #endregion
 
-        #region Mathmatical Methods
-        #endregion
-
-        private void tvCourses_MouseClick(object sender, MouseEventArgs e)
+        private void BuildWorkbook()
         {
+            _workbook = new XLWorkbook();
+            //List<string> revisedNames = new List<string>();
+            foreach (string assessment in _selectedAssessments)
+            {
+                string assessment_ident = assessment.Substring(assessment.LastIndexOf("__"));
+                string revised_name; 
+                int max_char = 29 - assessment_ident.Length;
+                if (assessment.Length >= 30)
+                {
+                    revised_name = assessment.Substring(0, max_char) + assessment_ident;
+                    revised_name = revised_name.Replace(" ", "").Trim();
+                    Debug.WriteLine(revised_name + " : " + assessment);
+                    AddWorksheet(_workbook, revised_name, assessment);
+                }
+                else
+                {
+                    AddWorksheet(_workbook, assessment, assessment);
+                }
+                //Debug.WriteLine(assessment + " " + assessment.Length);
+            }
+
+            SaveWorkbook(_workbook);
+        }
+
+        private void AddWorksheet(IXLWorkbook wb, string sheetName, string assessment)
+        {
+            //wb.AddWorksheet(sheetName);
+            IXLWorksheet ws = wb.AddWorksheet(sheetName);
+            BuildHeaderRow(wb, ws, 1);
+            BuildTotals(wb, ws,assessment,3);
+        }
+
+        private void BuildHeaderRow(IXLWorkbook wb, IXLWorksheet ws, int row)
+        {
+            //maxCol: Col 1 + number of Scale Points + 3;
+            // 3 is for each of the calculated columns: Frequency, Mean, and St Dev
+            int col = 1;
+            int maxCol = 1 + _assessmentScale.Count + 3;
+            ws.Range(row, col, row, maxCol).Merge();
+            ws.Cell(row, col).Value = "Assessment Report";
+            row++;
+            ws.Cell(row, col).Value = "Standard";
+            col++;
+            foreach (ScalePoint p in _assessmentScale)
+            {
+                ws.Cell(row, col).Value = p.Label + "--" + p.Value.ToString();
+                col++;
+            }
+            _frequency_col = col;
+            ws.Cell(row, col).Value = "Frequency (N)";
+            col++;
+            ws.Cell(row, col).Value = "Mean";
+            _mean_col = col;
+            col++;
+            ws.Cell(row, col).Value = "St Dev";
+            _stDev_col = col;
 
         }
+
+        private void BuildTotals(IXLWorkbook wb, IXLWorksheet ws, string assessment, int row)
+        {
+            List<string> Standards = AssessmentStandards(assessment);
+            Standards.Sort();
+            foreach (string s in Standards)
+            {
+                ws.Cell(row, 1).Value = s;
+                int col = 2;
+                Dictionary<string, int> dic = AssessmentTotals(assessment, s);
+                foreach (ScalePoint p in _assessmentScale)
+                {
+                    ws.Cell(row, col).Value = dic[p.Label];
+                    col++;
+                }
+                ws.Cell(row, _frequency_col).Value = StandardFrequencyByAssessment(assessment, s);
+                row++;
+            }
+
+
+        }
+
+        private bool AssessmentInCourse(string assessment, string cid)
+        {
+            return false;
+        }
+
+        private void SaveWorkbook(IXLWorkbook wb)
+        {
+            saveFileDialog1.Title = "Save Output";
+            saveFileDialog1.Filter = "Excel Workbook | *.xlsx";
+            DialogResult dr = saveFileDialog1.ShowDialog();
+            wb.SaveAs(saveFileDialog1.FileName);
+        }
+
+        private List<string> AssessmentStandards(string assessment)
+        {
+            List<string> rt_List = new List<string>();
+            rt_List = _AssessmentRows.Where(x => x.Rubric_Name == assessment).Select(x => x.Rubric_Row_Header)
+                .Distinct().ToList();
+            return rt_List;
+
+        }
+
+        private int StandardFrequencyByAssessment(string assessment, string standard)
+        {
+            int rt_value = 0;
+
+            rt_value = _AssessmentRows.Where(x => x.Rubric_Name == assessment && x.Rubric_Row_Header == standard)
+                .Count();
+
+            return rt_value;
+        }
+
+        private Dictionary<string, int> AssessmentTotals(string assessment, string standard)
+        {
+            Dictionary<string, int> rtDictionary = new Dictionary<string, int>();
+            foreach (ScalePoint p in _assessmentScale)
+            {
+                if (p.Label != "")
+                {
+                    rtDictionary.Add(p.Label, 0);
+                }
+            }
+            foreach (AssessmentRow ar in _AssessmentRows)
+            {
+                if (ar.Rubric_Name == assessment && ar.Rubric_Row_Header == standard && ar.Rubric_Column_Header !="")
+                {
+                    rtDictionary[ar.Rubric_Column_Header]++;
+                }
+            }
+            return rtDictionary;
+        }
+
+        private Dictionary<string, int> CourseTotals(string assessment, string standard, string courseID)
+        {
+            Dictionary<string, int> tmp = new Dictionary<string, int>();
+            foreach (ScalePoint p in _assessmentScale)
+            {
+                if (p.Label != "")
+                {
+                    tmp.Add(p.Label, 0);
+                }
+            }
+
+            foreach (AssessmentRow ar in _AssessmentRows)
+            {
+                if (ar.Rubric_Name == assessment
+                    && ar.Rubric_Row_Header == standard
+                    && ar.Course_ID == courseID)
+                {
+                    tmp[ar.Rubric_Column_Header]++;
+                }
+            }
+            return tmp;
+        }
+        #endregion
+
+
+
+
+
+
     }
 }
