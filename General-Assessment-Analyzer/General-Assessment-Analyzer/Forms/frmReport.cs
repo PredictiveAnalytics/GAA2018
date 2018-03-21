@@ -24,6 +24,7 @@ namespace General_Assessment_Analyzer.Forms
         public string _pathToCourseFile; 
         public string _pathToStudentFile;
         public string _pathToAssessmentFile;
+
         public List<AssessmentRow> _AssessmentRows;
         public List<AssessmentCourseRecord> _MatchedCourseRecords;
         public List<BannerCourseRecord> _BannerCourseRecords;
@@ -37,6 +38,8 @@ namespace General_Assessment_Analyzer.Forms
         public int _frequency_col;
         public int _mean_col;
         public int _stDev_col;
+        public int current_sheet_row;
+
         #endregion
         public frmReport()
         {
@@ -460,6 +463,7 @@ namespace General_Assessment_Analyzer.Forms
 
         private void btn_SaveWorkbook_Click(object sender, EventArgs e)
         {
+            //_assessmentScale.Sort();
             BuildWorkbook();
         }
 
@@ -647,46 +651,185 @@ namespace General_Assessment_Analyzer.Forms
 
         private void AddWorksheet(IXLWorkbook wb, string sheetName, string assessment)
         {
-            //wb.AddWorksheet(sheetName);
             IXLWorksheet ws = wb.AddWorksheet(sheetName);
-            BuildHeaderRow(wb, ws, 1);
-            BuildTotals(wb, ws,assessment,3);
+            int maxCol = 1 + _assessmentScale.Count + 3;
+            BuildHeaderRow(wb, ws, 1, assessment);
+            current_sheet_row = BuildTotals(wb, ws,assessment,3);
+            ws.Cell(current_sheet_row, 1).Value = "Assessments by Course";
+            ws.Range(current_sheet_row, 1, current_sheet_row, maxCol).Merge();
+            ws.Cell(current_sheet_row, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Cell(current_sheet_row, 1).Style.Font.Bold = true;
+            ws.Cell(current_sheet_row, 1).Style.Fill.BackgroundColor = XLColor.Maroon;
+            ws.Cell(current_sheet_row, 1).Style.Font.FontColor = XLColor.White;
+            current_sheet_row++;
+            foreach (string cid in _selectedCourseIDs)
+            {
+                bool found_assessment = AssessmentInCourse(assessment, cid);
+                if (found_assessment)
+                {
+                    current_sheet_row = BuildCourseHeaderRow(wb, ws, current_sheet_row,cid, assessment);
+                    current_sheet_row = BuildCourseTotals(wb, ws, assessment, cid, current_sheet_row);
+                }
+            }
+            current_sheet_row = BuildFooter(ws, current_sheet_row);
         }
 
-        private void BuildHeaderRow(IXLWorkbook wb, IXLWorksheet ws, int row)
+        private void BuildHeaderRow(IXLWorkbook wb, IXLWorksheet ws, int row, string assessment)
         {
             //maxCol: Col 1 + number of Scale Points + 3;
             // 3 is for each of the calculated columns: Frequency, Mean, and St Dev
             int col = 1;
             int maxCol = 1 + _assessmentScale.Count + 3;
             ws.Range(row, col, row, maxCol).Merge();
-            ws.Cell(row, col).Value = "Assessment Report";
+            ws.Cell(row, col).Value = "Assessment Report -- " + assessment;
+            ws.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.Maroon;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.White;
+
             row++;
             ws.Cell(row, col).Value = "Standard";
+            ws.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
             col++;
             foreach (ScalePoint p in _assessmentScale)
             {
                 ws.Cell(row, col).Value = p.Label + "--" + p.Value.ToString();
+                ws.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                ws.Cell(row, col).Style.Font.Bold = true;
+                ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+                ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
                 col++;
             }
             _frequency_col = col;
             ws.Cell(row, col).Value = "Frequency (N)";
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
             col++;
             ws.Cell(row, col).Value = "Mean";
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
             _mean_col = col;
             col++;
             ws.Cell(row, col).Value = "St Dev";
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
             _stDev_col = col;
-
         }
 
-        private void BuildTotals(IXLWorkbook wb, IXLWorksheet ws, string assessment, int row)
+        private int BuildFooter(IXLWorksheet ws, int row)
         {
+            int col = 1;
+            int maxCol = 1 + _assessmentScale.Count + 3;
+            ws.Range(row, col, row, maxCol).Merge();
+            ws.Cell(row, col).Value = "Assessment Report Provided by The Office of Insitutional Research and Assessment";
+            ws.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.Maroon;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.White;
+
+            row++;
+            ws.Range(row, col, row, maxCol).Merge();
+            ws.Cell(row, col).Value = "Prepared on: " + DateTime.Now.Month + "/" + DateTime.Now.Day + "/" + DateTime.Now.Year;
+            ws.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row,col).Style.Fill.BackgroundColor = XLColor.Maroon;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.White;
+
+            //ws.Column(1).Width = 100;
+            //ws.Column(1).AdjustToContents();
+            for (int i = 1; i <= maxCol; i++)
+            {
+                ws.Column(i).AdjustToContents();
+            }
+            ws.Column(1).Style.Alignment.WrapText = true;
+
+            return row;
+        }
+
+        private int BuildCourseHeaderRow(IXLWorkbook wb, IXLWorksheet ws, int row, string cid, string assessment)
+        {
+            //maxCol: Col 1 + number of Scale Points + 3;
+            // 3 is for each of the calculated columns: Frequency, Mean, and St Dev
+            int col = 1;
+            int maxCol = 1 + _assessmentScale.Count + 3;
+            ws.Range(row, col, row, maxCol).Merge();
+            //ws.Cell(row, col).Value = "Course: " + cid;
+            ws.Cell(row, col).Value = CourseNumberAndTitle(cid);
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            row++;
+            ws.Range(row, col, row, maxCol).Merge();
+            ws.Cell(row, col).Value = "Term: " + CourseTerm(cid);
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            row++;
+            ws.Range(row, col, row, maxCol).Merge();
+            ws.Cell(row, col).Value = "Dates: " + CourseDates(cid);
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            row++;
+            ws.Range(row, col, row, maxCol).Merge();
+            ws.Cell(row, col).Value = "Instructor: " + Instructor(cid);
+            ws.Cell(row, col).Hyperlink.ExternalAddress = InstEmailUri(cid, assessment);
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            row++;
+            ws.Cell(row, col).Value = "Standard";
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            col++;
+            foreach (ScalePoint p in _assessmentScale)
+            {
+                ws.Cell(row, col).Value = p.Label + "--" + p.Value.ToString();
+                ws.Cell(row, col).Style.Font.Bold = true;
+                ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+                ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+                col++;
+            }
+            _frequency_col = col;
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            ws.Cell(row, col).Value = "Frequency (N)";
+            col++;
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            ws.Cell(row, col).Value = "Mean";
+            _mean_col = col;
+            col++;
+            ws.Cell(row, col).Style.Font.Bold = true;
+            ws.Cell(row, col).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, col).Style.Font.FontColor = XLColor.Black;
+            ws.Cell(row, col).Value = "St Dev";
+            _stDev_col = col;
+            row++;
+            return row;
+        }
+
+        private int BuildTotals(IXLWorkbook wb, IXLWorksheet ws, string assessment, int row)
+        {
+            int rt_row = row;
             List<string> Standards = AssessmentStandards(assessment);
             Standards.Sort();
             foreach (string s in Standards)
             {
-                ws.Cell(row, 1).Value = s;
+                //ws.Cell(row, 1).Value = s;
+                //ws.Cell(row, 1).Value = Regex.Replace(s, "<.*?>", " ");
+                string tmp = Regex.Replace(s, "<.*?>", " ");
+                tmp = Regex.Replace(tmp, "&amp;", "&");
+                ws.Cell(row, 1).Value = tmp;
                 int col = 2;
                 Dictionary<string, int> dic = AssessmentTotals(assessment, s);
                 foreach (ScalePoint p in _assessmentScale)
@@ -695,15 +838,53 @@ namespace General_Assessment_Analyzer.Forms
                     col++;
                 }
                 ws.Cell(row, _frequency_col).Value = StandardFrequencyByAssessment(assessment, s);
+                ws.Cell(row, _mean_col).Value = MeanFromDictionary(dic);
+                ws.Cell(row, _stDev_col).Value = StDevFromDic(dic);
                 row++;
             }
+            rt_row = row;
+            return rt_row;
+        }
 
-
+        private int BuildCourseTotals(IXLWorkbook wb, IXLWorksheet ws, string assessment, string cid, int row)
+        {
+            int rt_row = row;
+            List<string> Standards = AssessmentStandards(assessment);
+            Standards.Sort();
+            foreach (string s in Standards)
+            {
+                //ws.Cell(row, 1).Value = s;
+                //ws.Cell(row, 1).Value = Regex.Replace(s, "<.*?>", " ");
+                string tmp = Regex.Replace(s, "<.*?>", " ");
+                tmp = Regex.Replace(tmp, "&amp;", "&");
+                ws.Cell(row, 1).Value = tmp;
+                int col = 2;
+                Dictionary<string, int> dic = CourseTotals(assessment, s, cid, row);
+                foreach (ScalePoint p in _assessmentScale)
+                {
+                    ws.Cell(row, col).Value = dic[p.Label];
+                    col++;
+                }
+                ws.Cell(row, _frequency_col).Value = StandardFrequencyByAssessmentAndCourse(assessment, s, cid);
+                ws.Cell(row, _mean_col).Value = MeanFromDictionary(dic);
+                ws.Cell(row, _stDev_col).Value = StDevFromDic(dic);
+                row++; 
+            }
+            rt_row = row;
+            return rt_row;
         }
 
         private bool AssessmentInCourse(string assessment, string cid)
         {
-            return false;
+            int count = _AssessmentRows.Where(x => x.Rubric_Name == assessment && x.Course_ID == cid).Count();
+            if (count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void SaveWorkbook(IXLWorkbook wb)
@@ -717,7 +898,7 @@ namespace General_Assessment_Analyzer.Forms
         private List<string> AssessmentStandards(string assessment)
         {
             List<string> rt_List = new List<string>();
-            rt_List = _AssessmentRows.Where(x => x.Rubric_Name == assessment).Select(x => x.Rubric_Row_Header)
+            rt_List = _AssessmentRows.Where(x => x.Rubric_Name == assessment && x.Rubric_Column_Header !="").Select(x => x.Rubric_Row_Header)
                 .Distinct().ToList();
             return rt_List;
 
@@ -727,7 +908,82 @@ namespace General_Assessment_Analyzer.Forms
         {
             int rt_value = 0;
 
-            rt_value = _AssessmentRows.Where(x => x.Rubric_Name == assessment && x.Rubric_Row_Header == standard)
+            rt_value = _AssessmentRows.Where(x => x.Rubric_Name == assessment && x.Rubric_Row_Header == standard && x.Rubric_Column_Header !="")
+                .Count();
+
+            return rt_value;
+            
+        }
+
+        private int TotalNFromDictionary(Dictionary<string, int> dictionary)
+        {
+            int value = 0;
+            foreach (KeyValuePair<string, int> kp in dictionary)
+            {
+                value += kp.Value;
+            }
+            return value;
+        }
+
+        private double MeanFromDictionary(Dictionary<string, int> dictionary)
+        {
+            double value = 0;
+            int totalN = TotalNFromDictionary(dictionary);
+            int timesValue = 0;
+
+            foreach (KeyValuePair<string, int> kp in dictionary)
+            {
+                foreach (ScalePoint p in _assessmentScale)
+                {
+                    if (p.Label == kp.Key)
+                    {
+                        timesValue += kp.Value * p.Value;
+                    }
+                }
+            }
+            if (timesValue > 0)
+            {
+                value = Math.Round((double) timesValue / totalN, 2);
+            }
+            return value;
+        }
+
+        private double StDevFromDic(Dictionary<string, int> dictionary)
+        {
+            double rt_StDev = 0;
+            List<int> Values = new List<int>();
+
+            foreach (KeyValuePair<string, int> kv in dictionary)
+            {
+                foreach (ScalePoint p in _assessmentScale)
+                {
+                    if (p.Label == kv.Key)
+                    {
+                        for (int i = 0; i < kv.Value; i++)
+                        {
+                            Values.Add(p.Value);
+                        }
+                    }
+                }
+            }
+            if (Values.Count > 1)
+            {
+                double avg = Values.Average();
+                double sum = Values.Sum(d => Math.Pow(d - avg, 2));
+                rt_StDev = Math.Round(Math.Sqrt((sum) / (Values.Count() - 1)), 2);
+            }
+            else
+            {
+                rt_StDev = 0;
+            }
+            return rt_StDev;
+        }
+
+        private int StandardFrequencyByAssessmentAndCourse(string assessment, string standard, string cid)
+        {
+            int rt_value = 0;
+
+            rt_value = _AssessmentRows.Where(x => x.Rubric_Name == assessment && x.Rubric_Row_Header == standard && x.Course_ID== cid && x.Rubric_Column_Header != "")
                 .Count();
 
             return rt_value;
@@ -753,7 +1009,7 @@ namespace General_Assessment_Analyzer.Forms
             return rtDictionary;
         }
 
-        private Dictionary<string, int> CourseTotals(string assessment, string standard, string courseID)
+        private Dictionary<string, int> CourseTotals(string assessment, string standard, string courseID, int start_row)
         {
             Dictionary<string, int> tmp = new Dictionary<string, int>();
             foreach (ScalePoint p in _assessmentScale)
@@ -768,19 +1024,53 @@ namespace General_Assessment_Analyzer.Forms
             {
                 if (ar.Rubric_Name == assessment
                     && ar.Rubric_Row_Header == standard
-                    && ar.Course_ID == courseID)
+                    && ar.Course_ID == courseID && ar.Rubric_Column_Header !="")
                 {
                     tmp[ar.Rubric_Column_Header]++;
                 }
             }
             return tmp;
         }
+
+        private string CourseNumberAndTitle(string cid)
+        {
+            return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
+                .Select(x => x.Subject + "-" + x.Number + "-" + x.Section + ": " + x.Title).First();
+        }
+
+        private string CourseTerm(string cid)
+        {
+            return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
+                .Select(x => x.Term_Desc + " (" + x.Term + ")").First();
+        }
+
+        private string CourseDates(string cid)
+        {
+            return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
+                .Select(x => x.Start_Date + " through " + x.End_Date).First();
+        }
+
+        private string Instructor(string cid)
+        {
+            return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
+                .Select(x => x.Instructor_First + " " + x.Instructor_Last).First();
+        }
+
+        private Uri InstEmailUri(string courseID, string assessment)
+        {
+            Uri rt = null;
+            string crn = _MatchedCourseRecords.Where(x => x.BB_Course_ID == courseID).Select(x => x.CRN).First();
+            string term = _MatchedCourseRecords.Where(x => x.BB_Course_ID == courseID).Select(x => x.Term).First();
+            string instEmail = _MatchedCourseRecords.Where(x=>x.BB_Course_ID == courseID).Select(x=>x.Email).First();
+            string mailto = "mailto:";
+            string subject = "?subject=Assessment Data (" + crn + "." + term + ") " + assessment;
+
+            string uri = mailto + instEmail + subject;
+            rt = new Uri(uri);
+
+            return rt;
+        }
+
         #endregion
-
-
-
-
-
-
     }
 }
