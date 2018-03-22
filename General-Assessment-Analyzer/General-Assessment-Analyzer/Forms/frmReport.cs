@@ -9,6 +9,10 @@ using AutoMapper;
 using ClosedXML.Excel;
 using General_Assessment_Analyzer.Classes;
 using System.Reflection;
+using System.Text;
+using System.Xml.Serialization;
+using DocumentFormat.OpenXml.Drawing.ChartDrawing;
+using General_Assessment_Analyzer.Properties;
 
 
 namespace General_Assessment_Analyzer.Forms
@@ -34,6 +38,7 @@ namespace General_Assessment_Analyzer.Forms
         public int _mean_col;
         public int _stDev_col;
         public int current_sheet_row;
+        public Catalog _assessmentCatalog;
 
         #endregion
         public frmReport()
@@ -65,14 +70,12 @@ namespace General_Assessment_Analyzer.Forms
             string path = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             string filepath = Path.Combine(path, "Resources");
             string file = Path.Combine(filepath, "CatalogFormatted.xml");
-            if (File.Exists(file))
+            if (!File.Exists(file))
             {
-                MessageBox.Show("Exists "  + file);
+                File.WriteAllBytes(file, Encoding.ASCII.GetBytes(Resources.CatalogFormatted));
             }
-            else
-            {
-                MessageBox.Show("Nope");
-            }
+
+            LoadCatalog(file, new XmlSerializer(typeof(Catalog)));
 
         }
 
@@ -651,8 +654,54 @@ namespace General_Assessment_Analyzer.Forms
                 }
                 //Debug.WriteLine(assessment + " " + assessment.Length);
             }
-
+            BuildCompletionsReport(_workbook);
             SaveWorkbook(_workbook);
+        }
+
+        private void BuildCompletionsReport(IXLWorkbook wb)
+        {
+            IXLWorksheet ws = wb.AddWorksheet("Completions Report");
+            ws.Position = 1;
+            int row = 1;
+            ws.Cell(row, 1).Value = "Completions Report";
+            row++;
+            ws.Cell(row, 1).Value = "CourseID"; 
+            ws.Cell(row, 2).Value = "Course";
+            ws.Cell(row, 3).Value = "Instructor";
+            ws.Cell(row, 4).Value = "Assessment";
+            ws.Cell(row, 5).Value = "Status";
+            row++;
+            foreach (string cid in _selectedCourseIDs)
+            {
+                string key = CourseKeyFromCID(cid);
+                ws.Cell(row, 1).Value = cid;
+                ws.Cell(row, 2).Value = CourseNumberAndTitle(cid);
+                ws.Cell(row, 3).Value = Instructor(cid);
+                foreach (CatalogEntry ce in _assessmentCatalog.Entries)
+                {
+                    if (ce.CourseKey == key)
+                    {
+                        //Debug.WriteLine("Match:" + ce.CourseKey + " " + key);
+                        ws.Cell(row, 4).Value = ce.Assessment;
+                        List<string> idents = AssessmentIdentsInCID(cid);
+                        idents.ForEach(x=>Debug.WriteLine("Ident: " + x + " CID: " + cid));
+                        foreach (string i in idents)
+                        {
+                            string tmp = i.Replace("_", string.Empty);
+                            if (tmp == ce.Assessment)
+                            {
+                                Debug.WriteLine("Match:");
+                                ws.Cell(row, 5).Value = "Complete";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Debug.WriteLine("No Match: " + ce.CourseKey + " " + key);
+                    }
+                }
+                row++;
+            }
         }
 
         private void AddWorksheet(IXLWorkbook wb, string sheetName, string assessment)
@@ -1044,6 +1093,28 @@ namespace General_Assessment_Analyzer.Forms
                 .Select(x => x.Subject + "-" + x.Number + "-" + x.Section + ": " + x.Title).First();
         }
 
+        private string CourseKeyFromCID(string cid)
+        {
+            return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
+                .Select(x => x.Subject + x.Number).First();
+        }
+
+        private List<string> AssessmentIdentsInCID(string cid)
+        {
+            List<string> rt_list = new List<string>();
+            List<string> assessmentsinCourse = _AssessmentRows.Where(x => x.Course_ID == cid).Select(x => x.Rubric_Name)
+                .Distinct().ToList();
+            foreach (string a in assessmentsinCourse)
+            {
+                string tmp = a.Substring(a.LastIndexOf("__"));
+                tmp = tmp.ToUpper();
+                //Debug.WriteLine(tmp);
+                rt_list.Add(tmp);
+            }
+            rt_list = rt_list.Distinct().ToList();
+            return rt_list;
+        }
+
         private string CourseTerm(string cid)
         {
             return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
@@ -1075,6 +1146,22 @@ namespace General_Assessment_Analyzer.Forms
             rt = new Uri(uri);
 
             return rt;
+        }
+
+        private void LoadCatalog(string path, XmlSerializer serializer)
+        {
+            try
+            {
+                FileStream fs = new FileStream(path, FileMode.Open);
+                _assessmentCatalog = (Catalog)serializer.Deserialize(fs);
+                lbCatalog.Visible = true;
+                fs.Close();
+                fs.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + " " + ex.Source);
+            }
         }
 
         #endregion

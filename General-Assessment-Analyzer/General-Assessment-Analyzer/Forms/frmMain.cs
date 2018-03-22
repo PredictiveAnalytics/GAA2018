@@ -32,5 +32,15 @@ namespace General_Assessment_Analyzer
             frmReport frm = new frmReport();
             frm.Show();
         }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Quit the Application?", "Quit?", MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+            if (dr == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
     }
 }
