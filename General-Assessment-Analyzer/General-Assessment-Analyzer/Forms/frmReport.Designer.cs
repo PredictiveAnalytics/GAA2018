@@ -32,7 +32,7 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnCombine = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lbCatalog = new System.Windows.Forms.Label();
             this.lb_StudentData = new System.Windows.Forms.Label();
             this.lb_CourseData = new System.Windows.Forms.Label();
             this.lb_AssessmentData = new System.Windows.Forms.Label();
@@ -78,7 +78,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnCombine);
-            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.lbCatalog);
             this.groupBox1.Controls.Add(this.lb_StudentData);
             this.groupBox1.Controls.Add(this.lb_CourseData);
             this.groupBox1.Controls.Add(this.lb_AssessmentData);
@@ -102,14 +102,15 @@
             this.btnCombine.UseVisualStyleBackColor = true;
             this.btnCombine.Click += new System.EventHandler(this.btnCombine_Click);
             // 
-            // label4
+            // lbCatalog
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 124);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(212, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Assessment Catalog Loaded from Computer";
+            this.lbCatalog.AutoSize = true;
+            this.lbCatalog.Location = new System.Drawing.Point(6, 124);
+            this.lbCatalog.Name = "lbCatalog";
+            this.lbCatalog.Size = new System.Drawing.Size(212, 13);
+            this.lbCatalog.TabIndex = 6;
+            this.lbCatalog.Text = "Assessment Catalog Loaded from Computer";
+            this.lbCatalog.Visible = false;
             // 
             // lb_StudentData
             // 
@@ -410,7 +411,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbCatalog;
         private System.Windows.Forms.Label lb_StudentData;
         private System.Windows.Forms.Label lb_CourseData;
         private System.Windows.Forms.Label lb_AssessmentData;

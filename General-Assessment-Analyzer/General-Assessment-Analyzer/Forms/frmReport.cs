@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Wordprocessing;
 using AutoMapper;
 using ClosedXML.Excel;
 using General_Assessment_Analyzer.Classes;
-using CheckBox = System.Windows.Forms.CheckBox;
+using System.Reflection;
+
 
 namespace General_Assessment_Analyzer.Forms
 {
@@ -67,7 +62,18 @@ namespace General_Assessment_Analyzer.Forms
 
         private void frmReport_Load(object sender, EventArgs e)
         {
-            
+            string path = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            string filepath = Path.Combine(path, "Resources");
+            string file = Path.Combine(filepath, "CatalogFormatted.xml");
+            if (File.Exists(file))
+            {
+                MessageBox.Show("Exists "  + file);
+            }
+            else
+            {
+                MessageBox.Show("Nope");
+            }
+
         }
 
         private void dgvScale_DataError(object sender, DataGridViewDataErrorEventArgs e)
