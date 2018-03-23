@@ -184,19 +184,27 @@ namespace General_Assessment_Analyzer.Forms
                     Subjects.Add(item.ToString());
                 }
                 //Remove courses that don't have the selected subject.
+                Debug.WriteLine("MatchedCourseRecordsPrv: " + _MatchedCourseRecords.Count);
                 _MatchedCourseRecords.RemoveAll(x => !Subjects.Contains(x.Subject));
+                Debug.WriteLine("MatchedCourseRecordsPost: " + _MatchedCourseRecords.Count);
                 //Grab the remaining CourseIDs.
                 CourseIDs = _MatchedCourseRecords.Select(x => x.BB_Course_ID).Distinct().ToList();
+                Debug.WriteLine("CourseIDCount: " + CourseIDs.Count);
                 //Remove Assessment Data for courses other than the remaining ones
+                Debug.WriteLine("ARPrv: " + _AssessmentRows.Count);
+                //_AssessmentRows.ForEach(x=>Debug.WriteLine(x.Course_ID));
                 _AssessmentRows.RemoveAll(x => !CourseIDs.Contains(x.Course_ID));
+                Debug.WriteLine("ARPost: " + _AssessmentRows.Count);
                 //Get a list of remaining Assessments.
                 Assessments = _AssessmentRows.Select(x => x.Rubric_Name).Distinct().ToList();
+                Debug.WriteLine("Assessments: " + Assessments.Count);
                 //Remove all those asssessments that do not have a double underscore.
                 Assessments.RemoveAll(x => !x.Contains("__"));
                 //Remove all assessment data that aren't in the selected assessments.
                 _AssessmentRows.RemoveAll(x => !Assessments.Contains(x.Rubric_Name));
                 foreach (string a in Assessments)
                 {
+                    Debug.WriteLine(a);
                     //Assessment names are formatted like: [Name][Double Underscore][Type][Number]
                     //This is an example__KA4 
                     //To get the type, pull anything after the double underscore and remove the number if its there. 
@@ -655,7 +663,62 @@ namespace General_Assessment_Analyzer.Forms
                 //Debug.WriteLine(assessment + " " + assessment.Length);
             }
             BuildCompletionsReport(_workbook);
+            BuildStudentReport(_workbook);
             SaveWorkbook(_workbook);
+        }
+
+        private void BuildStudentReport(IXLWorkbook wb)
+        {
+            IXLWorksheet ws = wb.AddWorksheet("Student Report");
+            ws.Position = 2;
+            int row = 1;
+            ws.Cell(row, 1).Value = "Student Performance Report";
+            ws.Range(row, 1, row, 12).Merge();
+            ws.Cell(row, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Cell(row, 1).Style.Font.Bold = true;
+            ws.Cell(row, 1).Style.Font.FontColor = XLColor.Black;
+            row++;
+            ws.Cell(row, 1).Value = "ID";
+            ws.Cell(row, 2).Value = "Last Name";
+            ws.Cell(row, 3).Value = "First Name";
+            ws.Cell(row, 4).Value = "Middle";
+            ws.Cell(row, 5).Value = "Degree";
+            ws.Cell(row, 6).Value = "Major";
+            ws.Cell(row, 7).Value = "Cohort";
+            ws.Cell(row, 8).Value = "Course";
+            ws.Cell(row, 9).Value = "Assessment";
+            ws.Cell(row, 10).Value = "Standard";
+            ws.Cell(row, 11).Value = "Result";
+            ws.Cell(row, 12).Value = "Score";
+            ws.Range(row, 1, row, 12).Style.Fill.BackgroundColor = XLColor.Maroon;
+            ws.Range(row, 1, row, 12).Style.Font.Bold = true;
+            ws.Range(row, 1, row, 12).Style.Font.FontColor = XLColor.White;
+            row++;
+            foreach (BannerStudentRecord bsr in _BannerStudentRecords)
+            {
+                List<AssessmentRow> bsr_assessments = _AssessmentRows.Where(x => x.STUDENT_ID == bsr.ID && x.Rubric_Column_Header != "").ToList();
+                foreach (AssessmentRow ar in bsr_assessments)
+                {
+                    ws.Cell(row, 1).Value = bsr.ID;
+                    ws.Cell(row, 2).Value = bsr.Last;
+                    ws.Cell(row, 3).Value = bsr.First;
+                    ws.Cell(row, 4).Value = bsr.Middle;
+                    ws.Cell(row, 5).Value = bsr.Degree;
+                    ws.Cell(row, 6).Value = bsr.MajorCode + " (" + bsr.MajorDesc + ")";
+                    ws.Cell(row, 7).Value = bsr.Cohort;
+                    ws.Cell(row, 8).Value = CourseNumberAndTitle(ar.Course_ID);
+                    ws.Cell(row, 9).Value = ar.Rubric_Name;
+                    //ws.Cell(row, 9).Value = ar.Rubric_Row_Header;
+                    //string tmp = Regex.Replace(s, "<.*?>", " ");
+                    ws.Cell(row, 10).Value = Regex.Replace(ar.Rubric_Row_Header, "<.*?>", " ");
+                    ws.Cell(row, 11).Value = ar.Rubric_Column_Header;
+                    ws.Cell(row, 12).Value = _assessmentScale.Where(x => x.Label == ar.Rubric_Column_Header)
+                        .Select(y => y.Value);
+                    row++;
+                }
+            }
+            ws.Columns().AdjustToContents();
         }
 
         private void BuildCompletionsReport(IXLWorkbook wb)
@@ -664,35 +727,53 @@ namespace General_Assessment_Analyzer.Forms
             ws.Position = 1;
             int row = 1;
             ws.Cell(row, 1).Value = "Completions Report";
+            ws.Range(row, 1, row, 5).Merge();
+            ws.Cell(row, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(row, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Cell(row, 1).Style.Font.Bold = true;
             row++;
-            ws.Cell(row, 1).Value = "CourseID"; 
-            ws.Cell(row, 2).Value = "Course";
-            ws.Cell(row, 3).Value = "Instructor";
-            ws.Cell(row, 4).Value = "Assessment";
-            ws.Cell(row, 5).Value = "Status";
+            ws.Cell(row, 1).Value = "Term";
+            ws.Cell(row, 2).Value = "CRN";
+            ws.Cell(row, 3).Value = "Course";
+            ws.Cell(row, 4).Value = "Instructor";
+            ws.Cell(row, 5).Value = "Assessment";
+            ws.Cell(row, 6).Value = "Status";
+            ws.Range(row, 1, row, 6).Style.Fill.BackgroundColor = XLColor.Maroon;
+            ws.Range(row, 1, row, 6).Style.Font.Bold = true;
+            ws.Range(row, 1, row, 6).Style.Font.FontColor = XLColor.White;
             row++;
             foreach (string cid in _selectedCourseIDs)
             {
+                bool found = false;
                 string key = CourseKeyFromCID(cid);
-                ws.Cell(row, 1).Value = cid;
-                ws.Cell(row, 2).Value = CourseNumberAndTitle(cid);
-                ws.Cell(row, 3).Value = Instructor(cid);
+                ws.Cell(row, 1).Value = CourseTerm(cid);
+                ws.Cell(row, 2).Value = CourseCRN(cid);
+                ws.Cell(row, 3).Value = CourseNumberAndTitle(cid);
+                ws.Cell(row, 4).Value = Instructor(cid);
                 foreach (CatalogEntry ce in _assessmentCatalog.Entries)
                 {
                     if (ce.CourseKey == key)
                     {
+                        found = true;
                         //Debug.WriteLine("Match:" + ce.CourseKey + " " + key);
-                        ws.Cell(row, 4).Value = ce.Assessment;
+                        ws.Cell(row, 5).Value = ce.Assessment;
                         List<string> idents = AssessmentIdentsInCID(cid);
                         idents.ForEach(x=>Debug.WriteLine("Ident: " + x + " CID: " + cid));
-                        foreach (string i in idents)
+                        if (idents.Count > 0)
                         {
-                            string tmp = i.Replace("_", string.Empty);
-                            if (tmp == ce.Assessment)
+                            foreach (string i in idents)
                             {
-                                Debug.WriteLine("Match:");
-                                ws.Cell(row, 5).Value = "Complete";
+                                string tmp = i.Replace("_", string.Empty);
+                                if (tmp == ce.Assessment)
+                                {
+                                    Debug.WriteLine("Match:");
+                                    ws.Cell(row, 6).Value = "Complete";
+                                }
                             }
+                        }
+                        else
+                        {
+                            ws.Cell(row, 6).Value = "Incomplete";
                         }
                     }
                     else
@@ -700,8 +781,13 @@ namespace General_Assessment_Analyzer.Forms
                         //Debug.WriteLine("No Match: " + ce.CourseKey + " " + key);
                     }
                 }
+                if (!found)
+                {
+                    ws.Cell(row, 6).Value = "Course Not Found in the Assessment Catalog";
+                }
                 row++;
             }
+            ws.Columns().AdjustToContents();
         }
 
         private void AddWorksheet(IXLWorkbook wb, string sheetName, string assessment)
@@ -1119,6 +1205,12 @@ namespace General_Assessment_Analyzer.Forms
         {
             return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
                 .Select(x => x.Term_Desc + " (" + x.Term + ")").First();
+        }
+
+        private string CourseCRN(string cid)
+        {
+            return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
+                .Select(x => x.CRN).First();
         }
 
         private string CourseDates(string cid)
