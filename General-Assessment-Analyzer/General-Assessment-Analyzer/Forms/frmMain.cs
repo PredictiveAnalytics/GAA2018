@@ -42,5 +42,11 @@ namespace General_Assessment_Analyzer
                 Application.Exit();
             }
         }
+
+        private void manageCatalogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmCatalog frm = new frmCatalog();
+            frm.Show();
+        }
     }
 }

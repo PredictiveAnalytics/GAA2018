@@ -63,20 +63,21 @@
             // manageCatalogToolStripMenuItem
             // 
             this.manageCatalogToolStripMenuItem.Name = "manageCatalogToolStripMenuItem";
-            this.manageCatalogToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.manageCatalogToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.manageCatalogToolStripMenuItem.Text = "&Manage Catalog";
+            this.manageCatalogToolStripMenuItem.Click += new System.EventHandler(this.manageCatalogToolStripMenuItem_Click);
             // 
             // prepareReportsToolStripMenuItem
             // 
             this.prepareReportsToolStripMenuItem.Name = "prepareReportsToolStripMenuItem";
-            this.prepareReportsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.prepareReportsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.prepareReportsToolStripMenuItem.Text = "Prepare Reports";
             this.prepareReportsToolStripMenuItem.Click += new System.EventHandler(this.prepareReportsToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
