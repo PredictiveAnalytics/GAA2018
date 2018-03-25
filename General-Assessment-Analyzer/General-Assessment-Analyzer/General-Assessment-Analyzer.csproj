@@ -111,6 +111,12 @@
     <Compile Include="Classes\CourseCatalog.cs" />
     <Compile Include="Classes\CourseCatalogEntry.cs" />
     <Compile Include="Classes\ScalePoint.cs" />
+    <Compile Include="Forms\frmAddAssessmentType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAddAssessmentType.Designer.cs">
+      <DependentUpon>frmAddAssessmentType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCatalog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +137,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\frmAddAssessmentType.resx">
+      <DependentUpon>frmAddAssessmentType.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCatalog.resx">
       <DependentUpon>frmCatalog.cs</DependentUpon>
     </EmbeddedResource>

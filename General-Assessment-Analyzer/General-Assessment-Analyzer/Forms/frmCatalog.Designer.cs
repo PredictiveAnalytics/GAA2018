@@ -30,12 +30,12 @@
         {
             this.lbEntries = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btn_AddCourse = new System.Windows.Forms.Button();
             this.btn_DeleteCourse = new System.Windows.Forms.Button();
+            this.btn_AddCourse = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.lbAssessments = new System.Windows.Forms.ListBox();
-            this.btn_DeleteAssessment = new System.Windows.Forms.Button();
             this.btn_AddAssessment = new System.Windows.Forms.Button();
+            this.btn_DeleteAssessment = new System.Windows.Forms.Button();
+            this.lbAssessments = new System.Windows.Forms.ListBox();
             this.Save = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -62,15 +62,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Courses in Catalog";
             // 
-            // btn_AddCourse
-            // 
-            this.btn_AddCourse.Location = new System.Drawing.Point(7, 354);
-            this.btn_AddCourse.Name = "btn_AddCourse";
-            this.btn_AddCourse.Size = new System.Drawing.Size(124, 23);
-            this.btn_AddCourse.TabIndex = 1;
-            this.btn_AddCourse.Text = "Add New";
-            this.btn_AddCourse.UseVisualStyleBackColor = true;
-            // 
             // btn_DeleteCourse
             // 
             this.btn_DeleteCourse.Location = new System.Drawing.Point(7, 383);
@@ -80,6 +71,15 @@
             this.btn_DeleteCourse.Text = "Delete Selected";
             this.btn_DeleteCourse.UseVisualStyleBackColor = true;
             this.btn_DeleteCourse.Click += new System.EventHandler(this.btn_DeleteCourse_Click);
+            // 
+            // btn_AddCourse
+            // 
+            this.btn_AddCourse.Location = new System.Drawing.Point(7, 354);
+            this.btn_AddCourse.Name = "btn_AddCourse";
+            this.btn_AddCourse.Size = new System.Drawing.Size(124, 23);
+            this.btn_AddCourse.TabIndex = 1;
+            this.btn_AddCourse.Text = "Add New";
+            this.btn_AddCourse.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -93,13 +93,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Assessments in Course";
             // 
-            // lbAssessments
+            // btn_AddAssessment
             // 
-            this.lbAssessments.FormattingEnabled = true;
-            this.lbAssessments.Location = new System.Drawing.Point(7, 20);
-            this.lbAssessments.Name = "lbAssessments";
-            this.lbAssessments.Size = new System.Drawing.Size(172, 238);
-            this.lbAssessments.TabIndex = 0;
+            this.btn_AddAssessment.Location = new System.Drawing.Point(7, 300);
+            this.btn_AddAssessment.Name = "btn_AddAssessment";
+            this.btn_AddAssessment.Size = new System.Drawing.Size(172, 23);
+            this.btn_AddAssessment.TabIndex = 2;
+            this.btn_AddAssessment.Text = "Add New";
+            this.btn_AddAssessment.UseVisualStyleBackColor = true;
+            this.btn_AddAssessment.Click += new System.EventHandler(this.btn_AddAssessment_Click);
             // 
             // btn_DeleteAssessment
             // 
@@ -109,15 +111,15 @@
             this.btn_DeleteAssessment.TabIndex = 1;
             this.btn_DeleteAssessment.Text = "Delete Selected";
             this.btn_DeleteAssessment.UseVisualStyleBackColor = true;
+            this.btn_DeleteAssessment.Click += new System.EventHandler(this.btn_DeleteAssessment_Click);
             // 
-            // btn_AddAssessment
+            // lbAssessments
             // 
-            this.btn_AddAssessment.Location = new System.Drawing.Point(7, 300);
-            this.btn_AddAssessment.Name = "btn_AddAssessment";
-            this.btn_AddAssessment.Size = new System.Drawing.Size(172, 23);
-            this.btn_AddAssessment.TabIndex = 2;
-            this.btn_AddAssessment.Text = "Add New";
-            this.btn_AddAssessment.UseVisualStyleBackColor = true;
+            this.lbAssessments.FormattingEnabled = true;
+            this.lbAssessments.Location = new System.Drawing.Point(7, 20);
+            this.lbAssessments.Name = "lbAssessments";
+            this.lbAssessments.Size = new System.Drawing.Size(172, 238);
+            this.lbAssessments.TabIndex = 0;
             // 
             // Save
             // 

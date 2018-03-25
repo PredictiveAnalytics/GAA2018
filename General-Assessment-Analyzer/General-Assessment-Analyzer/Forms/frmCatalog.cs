@@ -74,7 +74,49 @@ namespace General_Assessment_Analyzer.Forms
         {
             if(lbEntries.SelectedItems.Count>0)
             {
+                string course = lbEntries.SelectedItem.ToString();
+                string key = course.Replace("-", string.Empty).Trim();
+                DialogResult dr = MessageBox.Show("You are about to delete this course.  Assessments in this course will still be included in the the Assessment Reports, but not tracked in the Completions report.", "Continue deletion of " + course + "?",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    Debug.WriteLine("Entries before Delete: " + catalog.Entries.Count());
+                    catalog.Entries.RemoveAll(x => x.CourseKey == key);
+                    Debug.WriteLine("Entries after Delete: " + catalog.Entries.Count());
+                    lbEntries.Items.Clear();
+                    Courses = catalog.Entries.Select(x => x.Subject + "-" + x.Course).Distinct().ToList();
+                    Courses.ForEach(x => lbEntries.Items.Add(x));
+                    /*
+                     * Courses = catalog.Entries.Select(x => x.Subject + "-" + x.Course).Distinct().ToList();
+                       Courses.Sort();
+                       Courses.ForEach(x => lbEntries.Items.Add(x));
+                     */
+                }
+            }
+        }
 
+        private void btn_DeleteAssessment_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_AddAssessment_Click(object sender, EventArgs e)
+        {
+            if (lbEntries.SelectedItems.Count > 0)
+            {
+                List<string> included = new List<string>();
+                frmAddAssessmentType frm = new frmAddAssessmentType();
+                DialogResult dr = frm.ShowDialog();
+                string test = frm.returnValue;
+                if (dr == DialogResult.OK)
+                {
+                    Debug.WriteLine(test);
+                    lbAssessments.Items.Add(test);
+                }
+                foreach (var item in lbAssessments.Items)
+                {
+                    Debug.WriteLine(item);
+                    included.Add(item.ToString());
+                }
             }
         }
     }
