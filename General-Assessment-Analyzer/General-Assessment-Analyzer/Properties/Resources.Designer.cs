@@ -118,6 +118,16 @@ namespace General_Assessment_Analyzer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon if_09_Examination_2064484 {
+            get {
+                object obj = ResourceManager.GetObject("if_09_Examination_2064484", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon if_Draw_2290864 {
             get {
                 object obj = ResourceManager.GetObject("if_Draw_2290864", resourceCulture);

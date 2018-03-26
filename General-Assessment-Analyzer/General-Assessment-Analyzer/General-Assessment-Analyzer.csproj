@@ -25,7 +25,7 @@
     <TargetCulture>en</TargetCulture>
     <ProductName>General Assessment Analyzer</ProductName>
     <PublisherName>Concordia University Chicago</PublisherName>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -63,7 +63,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\if_Draw_2290864.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\if_09_Examination_2064484.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -187,6 +187,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\if_09_Examination_2064484.ico" />
     <None Include="Resources\if_Draw_2290864.ico" />
     <None Include="Resources\CAT.png" />
     <Content Include="Resources\CatalogFormatted.xml">
