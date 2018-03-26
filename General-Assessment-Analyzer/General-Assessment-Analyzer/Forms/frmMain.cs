@@ -63,8 +63,8 @@ namespace General_Assessment_Analyzer
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This feature is not developed yet.  Please check back shortly.", "Not Available",
-                MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            frmCOEReports frm = new frmCOEReports();
+            frm.Show();
         }
     }
 }
