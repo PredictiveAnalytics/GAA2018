@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace General_Assessment_Analyzer.Classes
 {
     [Serializable]
-    public class ScalePoint
+    public class ScalePoint: IComparable<ScalePoint>
     {
         [XmlElement("Label")]
         public string Label { get; set; }

@@ -61,6 +61,16 @@ namespace General_Assessment_Analyzer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CAT {
+            get {
+                object obj = ResourceManager.GetObject("CAT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
         ///&lt;Catalog xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;CatalogEntry&gt;
@@ -82,6 +92,36 @@ namespace General_Assessment_Analyzer.Properties {
         public static string CatalogFormatted {
             get {
                 return ResourceManager.GetString("CatalogFormatted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap COE {
+            get {
+                object obj = ResourceManager.GetObject("COE", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap GAA {
+            get {
+                object obj = ResourceManager.GetObject("GAA", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon if_Draw_2290864 {
+            get {
+                object obj = ResourceManager.GetObject("if_Draw_2290864", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

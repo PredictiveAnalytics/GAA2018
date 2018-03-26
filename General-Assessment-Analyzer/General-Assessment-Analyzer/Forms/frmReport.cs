@@ -334,7 +334,9 @@ namespace General_Assessment_Analyzer.Forms
 
                 _AssessmentRows.RemoveAll(x => !SelectedCIDS.Contains(x.Course_ID));
                 _AssessmentRows.RemoveAll(x => !_selectedAssessments.Contains(x.Rubric_Name));
-                Scale = _AssessmentRows.Select(x => x.Rubric_Column_Header).Distinct().ToList();
+                Scale = _AssessmentRows.Where(x => !string.IsNullOrEmpty(x.Rubric_Column_Header))
+                    .Select(x => x.Rubric_Column_Header).Distinct().ToList();
+                //Scale = _AssessmentRows.Select(x => x.Rubric_Column_Header).Distinct().ToList();
                 Scale.ForEach(x=>Debug.WriteLine(x));
                 foreach (string s in Scale)
                 {
@@ -480,7 +482,9 @@ namespace General_Assessment_Analyzer.Forms
 
         private void btn_SaveWorkbook_Click(object sender, EventArgs e)
         {
-            //_assessmentScale.Sort();
+            //
+            _assessmentScale.ForEach(x=>Debug.WriteLine("BugHunt:" + x.Label + " " + x.Value));
+           _assessmentScale.Sort();
             BuildWorkbook();
         }
 
@@ -727,7 +731,7 @@ namespace General_Assessment_Analyzer.Forms
             ws.Position = 1;
             int row = 1;
             ws.Cell(row, 1).Value = "Completions Report";
-            ws.Range(row, 1, row, 5).Merge();
+            ws.Range(row, 1, row, 6).Merge();
             ws.Cell(row, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
             ws.Cell(row, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             ws.Cell(row, 1).Style.Font.Bold = true;
@@ -888,6 +892,7 @@ namespace General_Assessment_Analyzer.Forms
             {
                 ws.Column(i).AdjustToContents();
             }
+            ws.Column(1).Width = 100;
             ws.Column(1).Style.Alignment.WrapText = true;
 
             return row;
@@ -1034,6 +1039,8 @@ namespace General_Assessment_Analyzer.Forms
             saveFileDialog1.Filter = "Excel Workbook | *.xlsx";
             DialogResult dr = saveFileDialog1.ShowDialog();
             wb.SaveAs(saveFileDialog1.FileName);
+            lb_WbSaved.Visible = true;
+            lb_WbPath.Text = saveFileDialog1.FileName.ToString();
         }
 
         private List<string> AssessmentStandards(string assessment)

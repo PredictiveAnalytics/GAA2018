@@ -62,6 +62,9 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\if_Draw_2290864.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
@@ -117,6 +120,12 @@
     <Compile Include="Forms\frmAddAssessmentType.Designer.cs">
       <DependentUpon>frmAddAssessmentType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmAddCourse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAddCourse.Designer.cs">
+      <DependentUpon>frmAddCourse.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCatalog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,6 +148,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\frmAddAssessmentType.resx">
       <DependentUpon>frmAddAssessmentType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmAddCourse.resx">
+      <DependentUpon>frmAddCourse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCatalog.resx">
       <DependentUpon>frmCatalog.cs</DependentUpon>
@@ -175,9 +187,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\if_Draw_2290864.ico" />
+    <None Include="Resources\CAT.png" />
     <Content Include="Resources\CatalogFormatted.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\GAA.png" />
+    <None Include="Resources\COE.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

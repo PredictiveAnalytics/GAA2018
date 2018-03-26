@@ -48,5 +48,23 @@ namespace General_Assessment_Analyzer
             frmCatalog frm = new frmCatalog();
             frm.Show();
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            frmCatalog frm = new frmCatalog();
+            frm.Show();
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport();
+            frm.Show();
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This feature is not developed yet.  Please check back shortly.", "Not Available",
+                MessageBoxButtons.OK, MessageBoxIcon.Hand);
+        }
     }
 }

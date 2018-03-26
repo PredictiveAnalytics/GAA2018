@@ -36,7 +36,7 @@
             this.btn_AddAssessment = new System.Windows.Forms.Button();
             this.btn_DeleteAssessment = new System.Windows.Forms.Button();
             this.lbAssessments = new System.Windows.Forms.ListBox();
-            this.Save = new System.Windows.Forms.Button();
+            this.btn_Save = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -80,6 +80,7 @@
             this.btn_AddCourse.TabIndex = 1;
             this.btn_AddCourse.Text = "Add New";
             this.btn_AddCourse.UseVisualStyleBackColor = true;
+            this.btn_AddCourse.Click += new System.EventHandler(this.btn_AddCourse_Click);
             // 
             // groupBox2
             // 
@@ -120,22 +121,24 @@
             this.lbAssessments.Name = "lbAssessments";
             this.lbAssessments.Size = new System.Drawing.Size(172, 238);
             this.lbAssessments.TabIndex = 0;
+            this.lbAssessments.SelectedIndexChanged += new System.EventHandler(this.lbAssessments_SelectedIndexChanged);
             // 
-            // Save
+            // btn_Save
             // 
-            this.Save.Location = new System.Drawing.Point(272, 399);
-            this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(75, 23);
-            this.Save.TabIndex = 3;
-            this.Save.Text = "btn_Save";
-            this.Save.UseVisualStyleBackColor = true;
+            this.btn_Save.Location = new System.Drawing.Point(272, 399);
+            this.btn_Save.Name = "btn_Save";
+            this.btn_Save.Size = new System.Drawing.Size(75, 23);
+            this.btn_Save.TabIndex = 3;
+            this.btn_Save.Text = "Save";
+            this.btn_Save.UseVisualStyleBackColor = true;
+            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
             // 
             // frmCatalog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(359, 434);
-            this.Controls.Add(this.Save);
+            this.Controls.Add(this.btn_Save);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "frmCatalog";
@@ -157,6 +160,6 @@
         private System.Windows.Forms.Button btn_AddAssessment;
         private System.Windows.Forms.Button btn_DeleteAssessment;
         private System.Windows.Forms.ListBox lbAssessments;
-        private System.Windows.Forms.Button Save;
+        private System.Windows.Forms.Button btn_Save;
     }
 }

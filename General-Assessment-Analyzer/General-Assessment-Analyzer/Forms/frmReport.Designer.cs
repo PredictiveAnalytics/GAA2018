@@ -60,6 +60,8 @@
             this.clb_Majors = new System.Windows.Forms.CheckedListBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.btn_SaveWorkbook = new System.Windows.Forms.Button();
+            this.lb_WbSaved = new System.Windows.Forms.Label();
+            this.lb_WbPath = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -376,11 +378,32 @@
             this.btn_SaveWorkbook.UseVisualStyleBackColor = true;
             this.btn_SaveWorkbook.Click += new System.EventHandler(this.btn_SaveWorkbook_Click);
             // 
+            // lb_WbSaved
+            // 
+            this.lb_WbSaved.AutoSize = true;
+            this.lb_WbSaved.Location = new System.Drawing.Point(684, 74);
+            this.lb_WbSaved.Name = "lb_WbSaved";
+            this.lb_WbSaved.Size = new System.Drawing.Size(94, 13);
+            this.lb_WbSaved.TabIndex = 8;
+            this.lb_WbSaved.Text = "Workbook Saved:";
+            // 
+            // lb_WbPath
+            // 
+            this.lb_WbPath.AutoSize = true;
+            this.lb_WbPath.Location = new System.Drawing.Point(684, 91);
+            this.lb_WbPath.MaximumSize = new System.Drawing.Size(200, 300);
+            this.lb_WbPath.Name = "lb_WbPath";
+            this.lb_WbPath.Size = new System.Drawing.Size(82, 13);
+            this.lb_WbPath.TabIndex = 9;
+            this.lb_WbPath.Text = "Workbook Path";
+            // 
             // frmReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(907, 603);
+            this.Controls.Add(this.lb_WbPath);
+            this.Controls.Add(this.lb_WbSaved);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox6);
@@ -403,6 +426,7 @@
             this.groupBox7.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -440,5 +464,7 @@
         private System.Windows.Forms.CheckedListBox clb_Majors;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.Button btn_SaveWorkbook;
+        private System.Windows.Forms.Label lb_WbSaved;
+        private System.Windows.Forms.Label lb_WbPath;
     }
 }
