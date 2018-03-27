@@ -111,6 +111,7 @@
     <Compile Include="Classes\BannerStudentRecord.cs" />
     <Compile Include="Classes\Catalog.cs" />
     <Compile Include="Classes\CatalogEntry.cs" />
+    <Compile Include="Classes\COEStudentRecord.cs" />
     <Compile Include="Classes\CourseCatalog.cs" />
     <Compile Include="Classes\CourseCatalogEntry.cs" />
     <Compile Include="Classes\ScalePoint.cs" />
