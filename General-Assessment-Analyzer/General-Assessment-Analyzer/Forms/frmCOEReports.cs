@@ -49,6 +49,7 @@ namespace General_Assessment_Analyzer.Forms
 
             IEnumerable<AssessmentRow> records = csv.GetRecords<AssessmentRow>();
             _AssessmentRows = records.ToList();
+            _AssessmentRows.RemoveAll(x => x.Rubric_Cell_Score == "NULL");
             return_value = true;
             //Debug.WriteLine("Assessment Data loaded: " + _AssessmentRows.Count);
 
@@ -197,7 +198,9 @@ namespace General_Assessment_Analyzer.Forms
                 ws.Cell(row, 9).Value = sr.PROGRAM_2_MAJOR_2;
                 row++;
             }
-            BuildAssessmentSheets(wb);
+            ws.Columns().AdjustToContents();
+            //BuildAssessmentSheets(wb);
+            BuildProgramSheets(wb);
             saveFileDialog1.Title = "Save Output";
             saveFileDialog1.Filter = "Excel Workbook | *.xlsx";
             DialogResult dr = saveFileDialog1.ShowDialog();
@@ -280,6 +283,51 @@ namespace General_Assessment_Analyzer.Forms
             }
 
             
+        }
+
+        private void BuildProgramSheets(IXLWorkbook wb)
+        {
+            List<string> PrimaryPrograms =
+                _StudentRecords.Select(x => x.PROGRAM_1 + "-" + x.PROGRAM_1_MAJOR_1).Distinct().ToList();
+            foreach (string program in PrimaryPrograms)
+            {
+                IXLWorksheet ws = wb.AddWorksheet(program);
+                int row = 2;
+                ws.Cell(1, 1).Value = "ID";
+                ws.Cell(1, 2).Value = "Last";
+                ws.Cell(1, 3).Value = "First";
+                ws.Cell(1, 4).Value = "Program";
+                ws.Cell(1, 5).Value = "Rubric";
+                ws.Cell(1, 6).Value = "Grade Column Name";
+                ws.Cell(1, 7).Value = "Row";
+                ws.Cell(1, 8).Value = "Result";
+                foreach (COEStudentRecord coe in _StudentRecords)
+                {
+                    string stuProgram = coe.PROGRAM_1 + "-" + coe.PROGRAM_1_MAJOR_1;
+                    if (stuProgram == program)
+                    {
+                        foreach (AssessmentRow ar in _AssessmentRows)
+                        {
+                            if (coe.ID == ar.STUDENT_ID)
+                            {
+                                ws.Cell(row, 1).Value = coe.ID;
+                                ws.Cell(row, 2).Value = coe.LAST;
+                                ws.Cell(row, 3).Value = coe.FIRST;
+                                ws.Cell(row, 4).Value = coe.PROGRAM_1 + "-" + coe.PROGRAM_1_MAJOR_1;
+                                ws.Cell(row, 5).Value = ar.Rubric_Name;
+                                ws.Cell(row, 6).Value = ar.Grade_Column_Name;
+                                ws.Cell(row, 7).Value = ar.Rubric_Row_Header;
+                                ws.Cell(row, 8).Value = ar.Rubric_Column_Header;
+                                row++;
+                            }
+                        }
+                    }
+                }
+                ws.Columns().AdjustToContents();
+                ws.Column(7).Width = 125;
+                ws.Column(7).Style.Alignment.WrapText = true;
+            }
+
         }
 
     }
