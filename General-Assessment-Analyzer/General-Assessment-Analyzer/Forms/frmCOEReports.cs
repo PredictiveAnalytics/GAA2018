@@ -299,16 +299,37 @@ namespace General_Assessment_Analyzer.Forms
                 ws.Cell(1, 4).Value = "Program";
                 ws.Cell(1, 5).Value = "Rubric";
                 ws.Cell(1, 6).Value = "Grade Column Name";
-                ws.Cell(1, 7).Value = "Row";
-                ws.Cell(1, 8).Value = "Result";
+                ws.Cell(1, 7).Value = "Row Number";
+                ws.Cell(1, 8).Value = "Row";
+                ws.Cell(1, 9).Value = "Result";
                 foreach (COEStudentRecord coe in _StudentRecords)
                 {
                     string stuProgram = coe.PROGRAM_1 + "-" + coe.PROGRAM_1_MAJOR_1;
                     if (stuProgram == program)
                     {
+                        List<AssessmentRow> studentAssessmentRows =
+                            _AssessmentRows.Where(x => x.STUDENT_ID == coe.ID && !string.IsNullOrEmpty(x.Position)).Distinct().ToList();
+                        studentAssessmentRows = studentAssessmentRows.OrderBy(a => a.Rubric_Name).ThenBy(b => b.Grade_Column_Name)
+                            .ThenBy(c => int.Parse(c.Position)).ToList();
+
+                        foreach (AssessmentRow ar in studentAssessmentRows)
+                        {
+                            ws.Cell(row, 1).Value = coe.ID;
+                            ws.Cell(row, 2).Value = coe.LAST;
+                            ws.Cell(row, 3).Value = coe.FIRST;
+                            ws.Cell(row, 4).Value = coe.PROGRAM_1 + "-" + coe.PROGRAM_1_MAJOR_1;
+                            ws.Cell(row, 5).Value = ar.Rubric_Name;
+                            ws.Cell(row, 6).Value = ar.Grade_Column_Name;
+                            ws.Cell(row, 7).Value = ar.Position;
+                            ws.Cell(row, 8).Value = ar.Rubric_Row_Header;
+                            ws.Cell(row, 9).Value = ar.Rubric_Column_Header;
+                            row++;
+                        }
+
+                        /*
                         foreach (AssessmentRow ar in _AssessmentRows)
                         {
-                            if (coe.ID == ar.STUDENT_ID)
+                            /*if (coe.ID == ar.STUDENT_ID)
                             {
                                 ws.Cell(row, 1).Value = coe.ID;
                                 ws.Cell(row, 2).Value = coe.LAST;
@@ -316,11 +337,13 @@ namespace General_Assessment_Analyzer.Forms
                                 ws.Cell(row, 4).Value = coe.PROGRAM_1 + "-" + coe.PROGRAM_1_MAJOR_1;
                                 ws.Cell(row, 5).Value = ar.Rubric_Name;
                                 ws.Cell(row, 6).Value = ar.Grade_Column_Name;
-                                ws.Cell(row, 7).Value = ar.Rubric_Row_Header;
-                                ws.Cell(row, 8).Value = ar.Rubric_Column_Header;
+                                ws.Cell(row, 7).Value = ar.Position;
+                                ws.Cell(row, 8).Value = ar.Rubric_Row_Header;
+                                ws.Cell(row, 9).Value = ar.Rubric_Column_Header;
                                 row++;
                             }
-                        }
+                         
+                        }*/
                     }
                 }
                 ws.Columns().AdjustToContents();

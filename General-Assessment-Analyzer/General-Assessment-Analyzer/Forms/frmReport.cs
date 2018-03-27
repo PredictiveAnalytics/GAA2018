@@ -130,7 +130,7 @@ namespace General_Assessment_Analyzer.Forms
                 if (!success)
                 {
                     MessageBox.Show(
-                        "There was a problem reading the Course Data file.  Please check the documenation to check formatting.",
+                        "There was a problem reading the Course Data file.  Please check the documenation to check formatting. ",
                         "Error Reading Course Data",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
@@ -531,7 +531,7 @@ namespace General_Assessment_Analyzer.Forms
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Error Reading Course File " + path);
+                Debug.WriteLine("Error Reading Course File " + path + e.ToString());
                 return_value = false;
             }
             return return_value;
@@ -796,6 +796,13 @@ namespace General_Assessment_Analyzer.Forms
 
         private void AddWorksheet(IXLWorkbook wb, string sheetName, string assessment)
         {
+            sheetName = sheetName.Replace(":", string.Empty);
+            sheetName = sheetName.Replace(@"\", string.Empty);
+            sheetName = sheetName.Replace("/", string.Empty);
+            sheetName = sheetName.Replace("?", string.Empty);
+            sheetName = sheetName.Replace("*", string.Empty);
+            sheetName = sheetName.Replace("[", string.Empty);
+            sheetName = sheetName.Replace("]", string.Empty);
             IXLWorksheet ws = wb.AddWorksheet(sheetName);
             int maxCol = 1 + _assessmentScale.Count + 3;
             BuildHeaderRow(wb, ws, 1, assessment);
