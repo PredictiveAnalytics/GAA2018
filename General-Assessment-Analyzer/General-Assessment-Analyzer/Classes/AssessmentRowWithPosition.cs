@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace General_Assessment_Analyzer.Classes
 {
     [Serializable]
-    public class AssessmentRow
+    public class AssessmentRowWithPosition
     {
         [XmlElement("Rubric_ID")]
-        public  string Rubric_ID { get; set; }
+        public string Rubric_ID { get; set; }
         [XmlElement("RA_pk1")]
         public string RA_pk1 { get; set; }
         [XmlElement("Rubric_Name")]
@@ -33,6 +37,8 @@ namespace General_Assessment_Analyzer.Classes
         [XmlElement("Rubric_Cell_Feedback")]
         public string Rubric_Cell_Feedback { get; set; }
         [XmlElement("Rubric_Cell_Score")]
-        public string Rubric_Cell_Score { get; set; }   
+        public string Rubric_Cell_Score { get; set; }
+        [XmlElement("Position")]
+        public string Position { get; set; }
     }
 }

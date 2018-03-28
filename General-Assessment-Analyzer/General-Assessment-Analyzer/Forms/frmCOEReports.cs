@@ -20,7 +20,7 @@ namespace General_Assessment_Analyzer.Forms
     public partial class frmCOEReports : Form
     {
         string _pathToAssessmentFile;
-        List<AssessmentRow> _AssessmentRows;
+        List<AssessmentRowWithPosition> _AssessmentRows;
         List<COEStudentRecord> _StudentRecords; 
         List<string> StudentIds;
         string sql; 
@@ -47,7 +47,7 @@ namespace General_Assessment_Analyzer.Forms
             csv.Configuration.MissingFieldFound = null;
             csv.Configuration.BadDataFound = null;
 
-            IEnumerable<AssessmentRow> records = csv.GetRecords<AssessmentRow>();
+            IEnumerable<AssessmentRowWithPosition> records = csv.GetRecords<AssessmentRowWithPosition>();
             _AssessmentRows = records.ToList();
             _AssessmentRows.RemoveAll(x => x.Rubric_Cell_Score == "NULL");
             return_value = true;
@@ -78,7 +78,7 @@ namespace General_Assessment_Analyzer.Forms
                 }
                 else
                 {
-                    foreach (AssessmentRow ar in _AssessmentRows)
+                    foreach (AssessmentRowWithPosition ar in _AssessmentRows)
                     {
                         if (ar.Rubric_Row_Header.Contains((char)13))
                         {
@@ -307,12 +307,10 @@ namespace General_Assessment_Analyzer.Forms
                     string stuProgram = coe.PROGRAM_1 + "-" + coe.PROGRAM_1_MAJOR_1;
                     if (stuProgram == program)
                     {
-                        List<AssessmentRow> studentAssessmentRows =
+                        List<AssessmentRowWithPosition> studentAssessmentRows =
                             _AssessmentRows.Where(x => x.STUDENT_ID == coe.ID && !string.IsNullOrEmpty(x.Position)).Distinct().ToList();
-                        studentAssessmentRows = studentAssessmentRows.OrderBy(a => a.Rubric_Name).ThenBy(b => b.Grade_Column_Name)
-                            .ThenBy(c => int.Parse(c.Position)).ToList();
 
-                        foreach (AssessmentRow ar in studentAssessmentRows)
+                        foreach (AssessmentRowWithPosition ar in studentAssessmentRows)
                         {
                             ws.Cell(row, 1).Value = coe.ID;
                             ws.Cell(row, 2).Value = coe.LAST;
@@ -346,6 +344,13 @@ namespace General_Assessment_Analyzer.Forms
                         }*/
                     }
                 }
+                var range = ws.Range(2, 1, row, 9);
+                range.SortColumns.Add(2, XLSortOrder.Ascending, true, true);
+                range.SortColumns.Add(3, XLSortOrder.Ascending, true, true);
+                range.SortColumns.Add(5, XLSortOrder.Ascending, true, true);
+                range.SortColumns.Add(6, XLSortOrder.Ascending, true, true);
+                range.SortColumns.Add(7, XLSortOrder.Ascending, true, true);
+                range.Sort();
                 ws.Columns().AdjustToContents();
                 ws.Column(7).Width = 125;
                 ws.Column(7).Style.Alignment.WrapText = true;

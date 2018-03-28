@@ -27,8 +27,10 @@ namespace General_Assessment_Analyzer.Forms
         public List<AssessmentRow> _AssessmentRows;
         public List<AssessmentCourseRecord> _MatchedCourseRecords;
         public List<BannerCourseRecord> _BannerCourseRecords;
+        public List<BannerCourseRecord> _UnFilteredBannerCourseRecords;
         public List<BannerStudentRecord> _BannerStudentRecords;
-        public List<ScalePoint> _assessmentScale; 
+        public List<ScalePoint> _assessmentScale;
+        public List<string> _selectedSubjects; 
 
         public List<string> _selectedAssessments;
         public List<string> _selectedCourseIDs;
@@ -183,6 +185,7 @@ namespace General_Assessment_Analyzer.Forms
                 {
                     Subjects.Add(item.ToString());
                 }
+                _selectedSubjects = Subjects;
                 //Remove courses that don't have the selected subject.
                 Debug.WriteLine("MatchedCourseRecordsPrv: " + _MatchedCourseRecords.Count);
                 _MatchedCourseRecords.RemoveAll(x => !Subjects.Contains(x.Subject));
@@ -526,6 +529,7 @@ namespace General_Assessment_Analyzer.Forms
 
                 IEnumerable<BannerCourseRecord> records = csv.GetRecords<BannerCourseRecord>();
                 _BannerCourseRecords = records.ToList();
+                _UnFilteredBannerCourseRecords = _BannerCourseRecords;
                 return_value = true;
                 Debug.WriteLine("Banner Course Records loaded: " + _BannerCourseRecords.Count);
             }
@@ -728,6 +732,12 @@ namespace General_Assessment_Analyzer.Forms
         private void BuildCompletionsReport(IXLWorkbook wb)
         {
             IXLWorksheet ws = wb.AddWorksheet("Completions Report");
+            Debug.WriteLine("Filter Checked: " + _selectedSubjects.Count);
+            Debug.WriteLine("Unfiltered Courses: " + _UnFilteredBannerCourseRecords.Count);
+            List<BannerCourseRecord> courses = _UnFilteredBannerCourseRecords.Where(x => _selectedSubjects.Contains(x.Subject)).Distinct().ToList();
+            Debug.WriteLine("Filter Courses: " + courses.Count);
+            Debug.WriteLine("CompReport");
+            courses.ForEach(x=>Debug.WriteLine(x));
             ws.Position = 1;
             int row = 1;
             ws.Cell(row, 1).Value = "Completions Report";
@@ -739,57 +749,72 @@ namespace General_Assessment_Analyzer.Forms
             ws.Cell(row, 1).Value = "Term";
             ws.Cell(row, 2).Value = "CRN";
             ws.Cell(row, 3).Value = "Course";
-            ws.Cell(row, 4).Value = "Instructor";
+            ws.Cell(row, 4).Value = "Instructor"; 
             ws.Cell(row, 5).Value = "Assessment";
-            ws.Cell(row, 6).Value = "Status";
+            ws.Cell(row, 6).Value = "Completed";
             ws.Range(row, 1, row, 6).Style.Fill.BackgroundColor = XLColor.Maroon;
             ws.Range(row, 1, row, 6).Style.Font.Bold = true;
             ws.Range(row, 1, row, 6).Style.Font.FontColor = XLColor.White;
             row++;
-            foreach (string cid in _selectedCourseIDs)
+            foreach (BannerCourseRecord bcr in courses)
             {
+                string key = bcr.Subject + bcr.Number;
                 bool found = false;
-                string key = CourseKeyFromCID(cid);
-                ws.Cell(row, 1).Value = CourseTerm(cid);
-                ws.Cell(row, 2).Value = CourseCRN(cid);
-                ws.Cell(row, 3).Value = CourseNumberAndTitle(cid);
-                ws.Cell(row, 4).Value = Instructor(cid);
                 foreach (CatalogEntry ce in _assessmentCatalog.Entries)
                 {
                     if (ce.CourseKey == key)
                     {
                         found = true;
-                        //Debug.WriteLine("Match:" + ce.CourseKey + " " + key);
-                        ws.Cell(row, 5).Value = ce.Assessment;
-                        List<string> idents = AssessmentIdentsInCID(cid);
-                        idents.ForEach(x=>Debug.WriteLine("Ident: " + x + " CID: " + cid));
-                        if (idents.Count > 0)
+                    }
+                }
+                if (found)
+                {
+                    List<string> idents = _assessmentCatalog.Entries.Where(x => x.CourseKey == key)
+                        .Select(x => x.Assessment).ToList();
+                    List<string> compAssessments = AssessmentIdentsInCID(bcr.CRN + "." + bcr.Term);
+                    if (idents.Count > 0)
+                    {
+                        idents.ForEach(x=>Debug.WriteLine(key + " " + x));
+                        foreach (string ident in idents)
                         {
-                            foreach (string i in idents)
+                            bool completed = false;
+                            ws.Cell(row, 1).Value = bcr.Term;
+                            ws.Cell(row, 2).Value = bcr.CRN;
+                            ws.Cell(row, 3).Value = bcr.Subject + "-" + bcr.Number + "-" + bcr.Section;
+                            ws.Cell(row, 4).Value = bcr.Instructor_First + " " + bcr.Instructor_Last;
+                            ws.Cell(row, 5).Value = ident;
+                            foreach (string comp in compAssessments)
                             {
-                                string tmp = i.Replace("_", string.Empty);
-                                if (tmp == ce.Assessment)
+                                Debug.WriteLine("Ident: " + ident + " " + "Comp:" + comp);
+                                string assessment = comp.Replace("_", string.Empty).Trim().ToLower();
+                                string checkIdent = ident.Trim().ToLower();
+                                if (checkIdent == assessment)
                                 {
-                                    Debug.WriteLine("Match:");
-                                    ws.Cell(row, 6).Value = "Complete";
+                                    completed = true;
                                 }
                             }
+                            if (completed)
+                            {
+                                ws.Cell(row, 6).Value = "Yes";
+                            }
+                            else
+                            {
+                                ws.Cell(row, 6).Value = "No";
+                            }
+                            row++;
                         }
-                        else
-                        {
-                            ws.Cell(row, 6).Value = "Incomplete";
-                        }
-                    }
-                    else
-                    {
-                        //Debug.WriteLine("No Match: " + ce.CourseKey + " " + key);
                     }
                 }
-                if (!found)
+                else
                 {
-                    ws.Cell(row, 6).Value = "Course Not Found in the Assessment Catalog";
+                    ws.Cell(row, 1).Value = bcr.Term;
+                    ws.Cell(row, 2).Value = bcr.CRN;
+                    ws.Cell(row, 3).Value = bcr.Subject + "-" + bcr.Number + "-" + bcr.Section;
+                    ws.Cell(row, 4).Value = bcr.Instructor_First + " " + bcr.Instructor_Last;
+                    ws.Cell(row, 5).Value = "Course not in Catalog";
+                    row++;
                 }
-                row++;
+                
             }
             ws.Columns().AdjustToContents();
         }
@@ -1190,7 +1215,7 @@ namespace General_Assessment_Analyzer.Forms
         private string CourseNumberAndTitle(string cid)
         {
             return _MatchedCourseRecords.Where(x => x.BB_Course_ID == cid)
-                .Select(x => x.Subject + "-" + x.Number + "-" + x.Section + ": " + x.Title).First();
+                .Select(x => x.Subject + "-" + x.Number + "-" + x.Section + ": " + x.Title + " (" + cid + ")").First();
         }
 
         private string CourseKeyFromCID(string cid)
