@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Xml.Serialization;
-
+/// <summary>
+/// Data class to store Course Records from Banner.  
+/// 
+/// Identical to the Banner course record with the exception of the BB_Course_ID Variable to make matching easier. 
+/// </summary>
 namespace General_Assessment_Analyzer.Classes
 {
     [Serializable]

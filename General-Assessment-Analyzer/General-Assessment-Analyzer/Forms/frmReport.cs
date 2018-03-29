@@ -800,6 +800,12 @@ namespace General_Assessment_Analyzer.Forms
                             else
                             {
                                 ws.Cell(row, 6).Value = "No";
+                                ws.Cell(row, 1).Style.Font.FontColor = XLColor.Red;
+                                ws.Cell(row, 2).Style.Font.FontColor = XLColor.Red;
+                                ws.Cell(row, 3).Style.Font.FontColor = XLColor.Red;
+                                ws.Cell(row, 4).Style.Font.FontColor = XLColor.Red;
+                                ws.Cell(row, 5).Style.Font.FontColor = XLColor.Red;
+                                ws.Cell(row, 6).Style.Font.FontColor = XLColor.Red;
                             }
                             row++;
                         }
