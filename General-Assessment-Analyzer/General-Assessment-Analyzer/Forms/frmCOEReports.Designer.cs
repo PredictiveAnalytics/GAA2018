@@ -120,7 +120,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 327);
             this.Controls.Add(this.btn_SaveReport);
             this.Controls.Add(this.btnLoadResults);
             this.Controls.Add(this.label3);
@@ -130,7 +130,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnGenerate);
             this.Name = "frmCOEReports";
-            this.Text = "frmCOEReports";
+            this.Text = "College of Education Assessment Report";
             this.Load += new System.EventHandler(this.frmCOEReports_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
