@@ -11,6 +11,25 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\crfhawnam\Desktop\GAA_Installer\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <TargetCulture>en</TargetCulture>
+    <ProductName>General Assessment Analyzer</ProductName>
+    <PublisherName>Concordia University Chicago</PublisherName>
+    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,6 +49,21 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>C570655AD44A6890941372D30461EE1893A18431</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>General-Assessment-Analyzer_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\if_09_Examination_2064484.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -73,18 +107,38 @@
   <ItemGroup>
     <Compile Include="Classes\AssessmentCourseRecord.cs" />
     <Compile Include="Classes\AssessmentRow.cs" />
+    <Compile Include="Classes\AssessmentRowWithPosition.cs" />
     <Compile Include="Classes\BannerCourseRecord.cs" />
     <Compile Include="Classes\BannerStudentRecord.cs" />
     <Compile Include="Classes\Catalog.cs" />
     <Compile Include="Classes\CatalogEntry.cs" />
+    <Compile Include="Classes\COEStudentRecord.cs" />
     <Compile Include="Classes\CourseCatalog.cs" />
     <Compile Include="Classes\CourseCatalogEntry.cs" />
     <Compile Include="Classes\ScalePoint.cs" />
+    <Compile Include="Forms\frmAddAssessmentType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAddAssessmentType.Designer.cs">
+      <DependentUpon>frmAddAssessmentType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmAddCourse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAddCourse.Designer.cs">
+      <DependentUpon>frmAddCourse.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCatalog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmCatalog.Designer.cs">
       <DependentUpon>frmCatalog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmCOEReports.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmCOEReports.Designer.cs">
+      <DependentUpon>frmCOEReports.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmMain.cs">
       <SubType>Form</SubType>
@@ -100,18 +154,35 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\frmAddAssessmentType.resx">
+      <DependentUpon>frmAddAssessmentType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmAddCourse.resx">
+      <DependentUpon>frmAddCourse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmCatalog.resx">
+      <DependentUpon>frmCatalog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmCOEReports.resx">
+      <DependentUpon>frmCOEReports.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmReport.resx">
+      <DependentUpon>frmReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="General-Assessment-Analyzer_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -126,6 +197,27 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\if_09_Examination_2064484.ico" />
+    <None Include="Resources\if_Draw_2290864.ico" />
+    <None Include="Resources\CAT.png" />
+    <Content Include="Resources\CatalogFormatted.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\GAA.png" />
+    <None Include="Resources\COE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

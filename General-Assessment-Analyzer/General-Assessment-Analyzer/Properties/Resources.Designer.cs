@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace General_Assessment_Analyzer.Properties
-{
-
-
+namespace General_Assessment_Analyzer.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,52 +19,119 @@ namespace General_Assessment_Analyzer.Properties
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    public class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if ((resourceMan == null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("General_Assessment_Analyzer.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CAT {
+            get {
+                object obj = ResourceManager.GetObject("CAT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;Catalog xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;CatalogEntry&gt;
+        ///    &lt;CourseKey&gt;CED6000&lt;/CourseKey&gt;
+        ///    &lt;Subject&gt;CED&lt;/Subject&gt;
+        ///    &lt;Course&gt;6000&lt;/Course&gt;
+        ///    &lt;Assessment&gt;CDA&lt;/Assessment&gt;
+        ///  &lt;/CatalogEntry&gt;
+        ///  &lt;CatalogEntry&gt;
+        ///    &lt;CourseKey&gt;CED6015&lt;/CourseKey&gt;
+        ///    &lt;Subject&gt;CED&lt;/Subject&gt;
+        ///    &lt;Course&gt;6015&lt;/Course&gt;
+        ///    &lt;Assessment&gt;CDA&lt;/Assessment&gt;
+        ///  &lt;/CatalogEntry&gt;
+        ///  &lt;CatalogEntry&gt;
+        ///    &lt;CourseKey&gt;CED6015&lt;/CourseKey&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string CatalogFormatted {
+            get {
+                return ResourceManager.GetString("CatalogFormatted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap COE {
+            get {
+                object obj = ResourceManager.GetObject("COE", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap GAA {
+            get {
+                object obj = ResourceManager.GetObject("GAA", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon if_09_Examination_2064484 {
+            get {
+                object obj = ResourceManager.GetObject("if_09_Examination_2064484", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon if_Draw_2290864 {
+            get {
+                object obj = ResourceManager.GetObject("if_Draw_2290864", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

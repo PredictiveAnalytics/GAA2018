@@ -24,8 +24,6 @@ namespace General_Assessment_Analyzer.Classes
         public string RateCode { get; set; }
         [XmlElement("RateDesc")]
         public string RateDesc { get; set; }
-        [XmlElement("User")]
-        public string User { get; set; }
         [XmlElement("Cohort")]
         public string Cohort { get; set; }
 
